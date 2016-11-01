@@ -1,6 +1,6 @@
 # LightNet: A Versatile, Standalone Matlab-based Environment for Deep Learning
 
-Chengxi Ye, Chen Zhao, Yezhou Yang, Cornelia Fermüller, and Yiannis Aloimonos. 2016. LightNet: A Versatile, Standalone Matlab-based Environment for Deep Learning. In Proceedings of the 2016 ACM on Multimedia Conference (MM '16). Amsterdam, The Netherlands, 1156-1159. DOI: http://dx.doi.org/10.1145/2964284.2973791
+Chengxi Ye, Chen Zhao, Yezhou Yang, Cornelia Fermüller, and Yiannis Aloimonos. 2016. LightNet: A Versatile, Standalone Matlab-based Environment for Deep Learning. In Proceedings of the 2016 ACM on Multimedia Conference (MM '16). Amsterdam, The Netherlands, 1156-1159. (http://dl.acm.org/citation.cfm?id=2973791)
 
 ![LightNet Icon](LightNet.png)
 
@@ -8,31 +8,10 @@ LightNet is a lightweight, versatile and purely Matlab-based deep learning frame
 
 ## How to use LightNet
 
-Install the latest Matlab R2016a on a computer with an Nvidia GPU (at least 3GB GPU memory), and run the RunAll.m Matlab script.  
+Install the latest Matlab on a computer with an Nvidia GPU (at least 3GB GPU memory), and run the RunAll.m Matlab script.  
 Read the latest documentation here:  
 http://arxiv.org/abs/1605.02766  
 Have fun!  
-
-
-If you find our work useful please cite it as:  
-
-@inproceedings{Ye:2016:LVS:2964284.2973791,
- author = {Ye, Chengxi and Zhao, Chen and Yang, Yezhou and Ferm\"{u}ller, Cornelia and Aloimonos, Yiannis},
- title = {LightNet: A Versatile, Standalone Matlab-based Environment for Deep Learning},
- booktitle = {Proceedings of the 2016 ACM on Multimedia Conference},
- series = {MM '16},
- year = {2016},
- isbn = {978-1-4503-3603-1},
- location = {Amsterdam, The Netherlands},
- pages = {1156--1159},
- numpages = {4},
- url = {http://doi.acm.org/10.1145/2964284.2973791},
- doi = {10.1145/2964284.2973791},
- acmid = {2973791},
- publisher = {ACM},
- address = {New York, NY, USA},
- keywords = {computer vision, convolutional neural networks, deep learning, image understanding, machine learning, multilayer perceptrons, natural language processing, recurrent neural networks, reinforcement learning},
-} 
 
 
 ## Recent updates
