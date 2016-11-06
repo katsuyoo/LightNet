@@ -1,6 +1,6 @@
 # LightNet: A Versatile, Standalone Matlab-based Environment for Deep Learning
 
-(Our work is accepted to ACM MULTIMEDIA 2016 Open Source Software Competition)
+Chengxi Ye, Chen Zhao, Yezhou Yang, Cornelia Fermüller, and Yiannis Aloimonos. 2016. LightNet: A Versatile, Standalone Matlab-based Environment for Deep Learning. In Proceedings of the 2016 ACM on Multimedia Conference (MM '16). Amsterdam, The Netherlands, 1156-1159. (http://dl.acm.org/citation.cfm?id=2973791)
 
 ![LightNet Icon](LightNet.png)
 
@@ -8,20 +8,11 @@ LightNet is a lightweight, versatile and purely Matlab-based deep learning frame
 
 ## How to use LightNet
 
-Install the latest Matlab R2016a on a computer with an Nvidia GPU (at least 3GB GPU memory), and run the RunAll.m Matlab script.  
+Install the latest Matlab on a computer with an Nvidia GPU (at least 3GB GPU memory), and run the RunAll.m Matlab script.  
 Read the latest documentation here:  
 http://arxiv.org/abs/1605.02766  
 Have fun!  
 
-
-If you find our work useful please cite it as:  
-
-@article{ye2016lightnet,  
-  title={LightNet: A Versatile, Standalone Matlab-based Environment for Deep Learning},  
-  author={Ye, Chengxi and Zhao, Chen and Yang, Yezhou and Fermuller, Cornelia and Aloimonos, Yiannis},  
-  journal={arXiv preprint arXiv:1605.02766},  
-  year={2016}  
-}  
 
 ## Recent updates
 
