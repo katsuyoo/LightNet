@@ -15,14 +15,13 @@ addpath('./lm_data');
 
 n_epoch=20;%20 %%training epochs
 dataset_name='char'; % dataset name
-network_name='lstm';%'rnn','gru','lstm';
+network_name='lstm';%'gru';'rnn','lstm'
 use_gpu=0; %%use gpu or not 
 opts.use_cudnn=0;
 
 PrepareDataFunc=@PrepareData_Char_RNN; %%function handler to prepare your data
 
 if strcmp(network_name,'lstm')
-    %opts.bnorm=1;
     NetInit=@net_init_char_lstm;%_bn  %% function to initialize the network
 end
    
@@ -32,7 +31,7 @@ end
 
 if strcmp(network_name,'rnn')
     NetInit=@net_init_char_rnn;  %% function to initialize the network
-    opts.parameters.Id_w=1;%vanilla rnn:0, otherwise: 1
+    opts.parameters.Id_w=1;%vanilla rnn:0, rnn with skip links: 1
 end
 
 
@@ -44,7 +43,7 @@ use_selective_sgd=0; %automatically select learning rates
 learning_method=@rmsprop; %training method: @rmsprop;
 
 %sgd parameter (unnecessary if selective-sgd is used)
-sgd_lr=5e-2;
+sgd_lr=1e-2;
 
 
 

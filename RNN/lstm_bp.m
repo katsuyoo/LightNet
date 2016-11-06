@@ -4,14 +4,11 @@ function [ net,res,opts ] = lstm_bp( net,res,opts )
 
     n_frames=opts.parameters.n_frames;    
     n_cell_nodes=opts.parameters.n_cell_nodes;
-    n_hidden_nodes=opts.parameters.n_hidden_nodes;
-    n_input_nodes=opts.parameters.n_input_nodes;
-    n_output_nodes=opts.parameters.n_output_nodes;
-    batch_size=opts.parameters.batch_size;
     
     %1: calculate the gradients of the data fitting transform
+    
     for f=1:n_frames
-        opts.dzdy=1.0;
+        opts.dzdy=res.Fit{f}(numel(net{end}.layers)+1).dzdx; 
         [net{4},res.Fit{f},opts] = net_bp(net{4},res.Fit{f},opts);    
     end 
     

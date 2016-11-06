@@ -10,18 +10,18 @@ function [opts]=test_rnn(net,opts)
     
     for mini_b=1:opts.n_test_batch
         idx=1+(mini_b-1)*opts.parameters.batch_size:mini_b*opts.parameters.batch_size;
-        inputs.data=opts.test(:,idx,:);
-        inputs.labels=opts.test_labels(idx,:);
+        opts.input_data=opts.test(:,idx,:);
+        opts.input_labels=opts.test_labels(idx,:);
 
         %forward
         if strcmp(opts.network_name,'lstm')
-            [ net,res,opts ] = lstm_ff( net,inputs,opts );
+            [ net,res,opts ] = lstm_ff( net,opts );
         end
         if strcmp(opts.network_name,'gru')
-            [ net,res,opts ] = gru_ff( net,inputs,opts );
+            [ net,res,opts ] = gru_ff( net,opts );
         end
         if strcmp(opts.network_name,'rnn')
-            [ net,res,opts ] = rnn_ff( net,inputs,opts );
+            [ net,res,opts ] = rnn_ff( net,opts );
         end
        
         if isfield(opts,'err')

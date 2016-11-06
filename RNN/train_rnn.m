@@ -21,22 +21,28 @@ function [net,opts]=train_rnn(net,opts)
         idx=opts.order(1+(mini_b-1)*opts.parameters.batch_size:mini_b*opts.parameters.batch_size);
         
         %%get your input here
-        inputs.data=opts.train(:,idx,:);
-        inputs.labels=opts.train_labels(idx,:);
+        opts.input_data=opts.train(:,idx,:);
+        opts.input_labels=opts.train_labels(idx,:);
 
         %forward
         if strcmp(opts.network_name,'lstm')
-            [ net,res,opts ] = lstm_ff( net,inputs,opts );
+            [ net,res,opts ] = lstm_ff( net,opts );
         end
         if strcmp(opts.network_name,'gru')
-            [ net,res,opts ] = gru_ff( net,inputs,opts );
+            [ net,res,opts ] = gru_ff( net,opts );
         end
         
         if strcmp(opts.network_name,'rnn')
-            [ net,res,opts ] = rnn_ff( net,inputs,opts );
+            [ net,res,opts ] = rnn_ff( net,opts );
         end
         
-            
+        
+        %%The following lines are to facilitate using customized loss functions
+        for t=1:opts.parameters.n_frames   
+            res.Fit{t}(numel(net{end}.layers)+1).dzdx=1.0;
+        end
+        %%%%%%%%%%%%%%%%%%%%%%%%
+        
         
         %%backward
         if strcmp(opts.network_name,'lstm')
@@ -50,10 +56,10 @@ function [net,opts]=train_rnn(net,opts)
             [ net,res,opts ] = rnn_bp( net,res,opts );
         end
         %%summarize
-        if opts.display_msg==1 && isfield(inputs,'labels')
+        if opts.display_msg==1 && isfield(opts,'input_labels')
             disp([' Minibatch error: ', num2str(opts.err(1)), ' Minibatch loss: ', num2str(opts.loss(1))])
         end
-        if opts.display_msg==1 && ~isfield(inputs,'labels')
+        if opts.display_msg==1 && ~isfield(opts,'input_labels')
             disp([' Minibatch loss: ', num2str(opts.loss(1))])
         end
         
