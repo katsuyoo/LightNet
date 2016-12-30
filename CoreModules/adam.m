@@ -15,7 +15,7 @@ function [  net,res,opts ] = adam(  net,res,opts )
         net.iterations=0;
     end
     
-    if ~isfield(opts.results,'lrs')
+    if ~isfield(opts,'results')||~isfield(opts.results,'lrs')
         opts.results.lrs=[];%%not really necessary
     end
     opts.results.lrs=[opts.results.lrs;gather(opts.parameters.lr)];
@@ -27,7 +27,7 @@ function [  net,res,opts ] = adam(  net,res,opts )
     net.iterations=net.iterations+1;
    
      for layer=1:numel(net.layers)
-        if strcmp(net.layers{layer}.type,'conv')||strcmp(net.layers{layer}.type,'mlp')
+        if isfield(net.layers{1,layer},'weights')%strcmp(net.layers{layer}.type,'conv')||strcmp(net.layers{layer}.type,'mlp')
             if ~isfield(net.layers{1,layer},'momentum')||(isfield(opts,'reset_mom')&&opts.reset_mom==1)||length(net.layers{1,layer}.momentum)<4
                 net.layers{1,layer}.momentum{1}=zeros(size(net.layers{1,layer}.weights{1}),'like',net.layers{1,layer}.weights{1});
                 net.layers{1,layer}.momentum{2}=zeros(size(net.layers{1,layer}.weights{2}),'like',net.layers{1,layer}.weights{2});

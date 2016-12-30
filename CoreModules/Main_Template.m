@@ -7,8 +7,6 @@ NetInit=@net_init_mlp_mnist;
 use_selective_sgd=1;
 ssgd_search_freq=3;
 selection_reset_freq=3;
-asgd_reset_freq=10;
-asgd_lr=5e-2;
 sgd_lr=1e-2;
 opts.n_epoch=100;
 opts.LoadResults=0;
@@ -101,29 +99,7 @@ if opts.parameters.selective_sgd==0
     opts.parameters.lr =sgd_lr;
 end
 
-if (~exist('asgd_reset_freq','var'))
-    asgd_reset_freq=0;
-end
 
-%adaptive-sgd parameters
-if strcmp(func2str(opts.parameters.learning_method),'adaptive_sgd')||strcmp(func2str(opts.parameters.learning_method),'adaptive_sgd_ew')
-    opts.parameters.asgd_reset_freq=asgd_reset_freq;
-    if opts.parameters.selective_sgd==0
-        opts.parameters.lr_max =opts.parameters.lr;
-        opts.parameters.lr_min=opts.parameters.lr_max*1e-4;
-    end
-    
-
-    opts.parameters.asgd_lr=asgd_lr;%learning rate of learning rate
-    if ~isfield(opts.parameters,'asgd_lr_decay')
-        opts.parameters.asgd_lr_decay=0.9;
-    end
-    
-    if exist('asgd_mom','var')
-        opts.parameters.asgd_mom=asgd_mom;
-    end
-    
-end
 
 %%sgd parameters
 if ~isfield(opts.parameters,'mom')
