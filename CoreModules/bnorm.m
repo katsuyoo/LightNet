@@ -41,7 +41,7 @@ function [ net,y,dzdw,dzdb,opts ] = bnorm( net,x,layer_idx,dzdy,opts )
     end
         
     if ~isfield(opts.parameters, 'simple_bn')
-        opts.parameters.simple_bn=1;
+        opts.parameters.simple_bn=0;
     end
     mom_factor=1-opts.parameters.mom_bn.^(net.iterations_bn+1);
     
@@ -64,14 +64,14 @@ function [ net,y,dzdw,dzdb,opts ] = bnorm( net,x,layer_idx,dzdy,opts )
             
     if(isempty(dzdy))
         
-        net.layer{opts.current_layer}.x_n=bsxfun(@minus,x,net.layers{1,layer_idx}.weights{3}./mom_factor);
-        net.layer{opts.current_layer}.x_n=bsxfun(@rdivide,net.layer{opts.current_layer}.x_n,(net.layers{1,layer_idx}.weights{4}./mom_factor+opts.parameters.eps_bn).^0.5);
+        net.layers{opts.current_layer}.x_n=bsxfun(@minus,x,net.layers{1,layer_idx}.weights{3}./mom_factor);
+        net.layers{opts.current_layer}.x_n=bsxfun(@rdivide,net.layers{opts.current_layer}.x_n,(net.layers{1,layer_idx}.weights{4}./mom_factor+opts.parameters.eps_bn).^0.5);
         
-        y=bsxfun(@times,net.layer{opts.current_layer}.x_n,net.layers{1,layer_idx}.weights{1});
+        y=bsxfun(@times,net.layers{opts.current_layer}.x_n,net.layers{1,layer_idx}.weights{1});
         y=bsxfun(@plus,y,net.layers{1,layer_idx}.weights{2});
         
     else
-        dzdw=mean(dzdy.*net.layer{opts.current_layer}.x_n,batch_dim);
+        dzdw=mean(dzdy.*net.layers{opts.current_layer}.x_n,batch_dim);
         dzdb=mean(dzdy,batch_dim);
         
         denom=1;
@@ -89,7 +89,7 @@ function [ net,y,dzdw,dzdb,opts ] = bnorm( net,x,layer_idx,dzdy,opts )
             tmp=bsxfun(@times,dzdw./denom,tmp);
             tmp=bsxfun(@plus,dzdb./denom,tmp);
             dzdy=(dzdy-tmp.*(1-opts.parameters.mom_bn));
-
+            clear tmp;
             %[max(abs(dzdy(:))), max(abs(tmp(:)))]
         end
         
