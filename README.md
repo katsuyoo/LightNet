@@ -16,7 +16,7 @@ Have fun!
 
 ## Recent updates
 
-CUDNN is supported by installing Neural Network Toolbox from Mathworks.
+CUDNN is supported by installing Neural Network Toolbox from Mathworks. The convolutional network training is over 10x faster than the previous release!
 
 LightNet supports using pretrained ImageNet network models. 
 ![coco](coco.png)
