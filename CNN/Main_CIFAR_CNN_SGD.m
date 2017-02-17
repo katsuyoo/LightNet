@@ -8,7 +8,7 @@ opts.use_nntoolbox=1 %Requires Neural Network Toolbox to use it.
 %function handle to prepare your data
 PrepareDataFunc=@PrepareData_CIFAR_CNN;
 %function handle to initialize the network
-NetInit=@net_init_cifar_slow;
+NetInit=@net_init_cifar_cnn;
 
 %automatically select learning rates
 use_selective_sgd=1;

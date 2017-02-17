@@ -30,5 +30,5 @@ cd('./CNN');
 disp('Testing training a new convolutional neural network.')
 disp('Neural Network Toolbox is required by default.')
 disp('If you do not have it please set opts.use_nntoolbox=0')
-Main_CIFAR_CNN_slow_SGD();
+Main_CIFAR_CNN_SGD();
 cd ..

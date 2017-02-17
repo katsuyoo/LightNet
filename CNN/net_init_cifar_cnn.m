@@ -1,4 +1,4 @@
-function net = net_init_cifar(opts)
+function net = net_init_cifar_cnn(opts)
 % CNN_MNIST_LENET Initialize a CNN similar for MNIST
 
 
@@ -50,26 +50,5 @@ net.layers{end+1} = struct('type', 'conv', ...
                            'pad', 0) ;
 
 net.layers{end+1} = struct('type', 'softmaxloss') ;
-%net.layers{end+1} = struct('type', 'pdist','p',2,'noRoot',true,'epsilon',1e-6) ;
-%net.layers{end+1} = struct('type', 'mhinge') ;
-
-for i=1:numel(net.layers)
-    if strcmp(net.layers{i}.type,'conv')
-        net.layers{1,i}.momentum{1}=zeros(size(net.layers{1,i}.weights{1}));
-        net.layers{1,i}.momentum{2}=zeros(size(net.layers{1,i}.weights{2}));
-    end
-end
-
-
-if(exist('opts','var'))
-    if strcmp(opts.parameters.learning_method,'ew_greedy_sgd')==1
-        for i=1:numel(net.layers)
-            if strcmp(net.layers{i}.type,'conv')||strcmp(net.layers{i}.type,'mlp')
-                net.layers{1,i}.lr{1}=ones(size(net.layers{1,i}.weights{1}))*opts.parameters.lr;
-                net.layers{1,i}.lr{2}=ones(size(net.layers{1,i}.weights{2}))*opts.parameters.lr;
-            end
-        end
-    end
-end
 
 
