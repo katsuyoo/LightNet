@@ -48,9 +48,11 @@ if isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1 %
     conv2d_nntb.Weights.Value=kernel;
     conv2d_nntb.Bias.Value=permute(bias(:),[3,4,1,2]);    
     if isempty(dzdy)  
-        
+        try
         y=conv2d_nntb.forward(I);
-    
+        catch
+            ''
+        end
     else 
         
         y = conv2d_nntb.backward( I, [], dzdy, [] );

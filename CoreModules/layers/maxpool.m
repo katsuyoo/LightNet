@@ -1,4 +1,25 @@
-function [ y,from ] = maxpool( I, K, S,pad,dzdy,from,opts )
+function [ y,from,opts ] = maxpool( I, K, S,pad,dzdy,from,opts )
+
+if opts.use_nntoolbox==1
+    
+    if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'maxpool2d_nntb')
+        if isempty(pad),pad=[0,0,0,0];end
+        if length(K)==1,K=[K,K];end
+        opts.layer{opts.current_layer}.maxpool_nntb = nnet.internal.cnn.layer.MaxPooling2D( 'maxpool2d_nntb', K,S,pad(1:2:end));
+    end    
+    maxpool_nntb=opts.layer{opts.current_layer}.maxpool_nntb ;
+    
+    if isempty(dzdy)
+        y=maxpool_nntb.forward(I);
+        from=y;
+    else
+        y= maxpool_nntb.backward( I, from, dzdy, []);
+    end    
+    return;
+end
+
+
+
 
 if exist('opts','var')
    if ~isfield(opts,'parameters')||~isfield(opts.parameters,'eps_pool')

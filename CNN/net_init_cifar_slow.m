@@ -14,7 +14,7 @@ net.layers{end+1} = struct('type', 'conv', ...
                            'pad', 2) ;
 net.layers{end+1} = struct('type', 'relu') ;
 
-net.layers{end+1} = struct('type', 'pool','pool', 3, 'stride', 2,'pad', [0,1,0,1]) ;
+net.layers{end+1} = struct('type', 'pool','pool', 3, 'stride', 2,'pad', [1,1,1,1]) ;
 % Block 2
 
 net.layers{end+1} = struct('type', 'conv', ...
@@ -23,7 +23,7 @@ net.layers{end+1} = struct('type', 'conv', ...
                            'pad', 2) ;
 net.layers{end+1} = struct('type', 'relu') ;
 
-net.layers{end+1} = struct('type', 'pool','pool', 3, 'stride', 2,'pad', [0,1,0,1]) ;
+net.layers{end+1} = struct('type', 'pool','pool', 3, 'stride', 2,'pad', [1,1,1,1]) ;
 
 % Block 3
 
@@ -33,7 +33,7 @@ net.layers{end+1} = struct('type', 'conv', ...
                            'pad', 2) ;
 net.layers{end+1} = struct('type', 'relu') ;
 
-net.layers{end+1} = struct('type', 'pool','pool', 3, 'stride', 2,'pad', [0,1,0,1]) ;
+net.layers{end+1} = struct('type', 'pool','pool', 3, 'stride', 2,'pad', [1,1,1,1]) ;
 
 % Block 4
 net.layers{end+1} = struct('type', 'conv', ...

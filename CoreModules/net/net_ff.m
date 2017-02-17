@@ -83,9 +83,9 @@ function [ net,res,opts ] = net_ff( net,res,opts )
                 end
                 
                 if opts.training==1
-                    [res(layer+1).x,res(layer+1).from] = maxpool(res(layer).x,net.layers{1,layer}.pool,net.layers{1,layer}.stride,net.layers{1,layer}.pad,[],[],opts);
+                    [res(layer+1).x,res(layer+1).from,opts] = maxpool(res(layer).x,net.layers{1,layer}.pool,net.layers{1,layer}.stride,net.layers{1,layer}.pad,[],[],opts);
                 else
-                    [res(layer+1).x,~] = maxpool(res(layer).x,net.layers{1,layer}.pool,net.layers{1,layer}.stride,net.layers{1,layer}.pad,[],[],opts);
+                    [res(layer+1).x,~,opts] = maxpool(res(layer).x,net.layers{1,layer}.pool,net.layers{1,layer}.stride,net.layers{1,layer}.pad,[],[],opts);
                 end
             case 'softmaxloss'
                 res(layer+1).x = softmaxlogloss(res(layer).x, res(1).class) ;               

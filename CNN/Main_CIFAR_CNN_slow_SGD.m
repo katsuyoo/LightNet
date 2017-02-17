@@ -11,7 +11,7 @@ PrepareDataFunc=@PrepareData_CIFAR_CNN;
 NetInit=@net_init_cifar_slow;
 
 %automatically select learning rates
-use_selective_sgd=0;
+use_selective_sgd=1;
 %select a new learning rate every n epochs
 ssgd_search_freq=20;
 

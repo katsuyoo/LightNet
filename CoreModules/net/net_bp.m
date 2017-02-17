@@ -75,7 +75,7 @@ function [ net,res,opts ] = net_bp( net,res,opts )
                     end
                 end
                 
-                res(layer).dzdx = maxpool(res(layer).x, net.layers{1,layer}.pool, net.layers{1,layer}.stride,net.layers{1,layer}.pad,res(layer+1).dzdx,res(layer+1).from);
+                res(layer).dzdx = maxpool(res(layer).x, net.layers{1,layer}.pool, net.layers{1,layer}.stride,net.layers{1,layer}.pad,res(layer+1).dzdx,res(layer+1).from,opts);
 
             case 'softmaxloss'
                 res(layer).dzdx = softmaxlogloss(res(layer).x, res(1).class, res(layer+1).dzdx) ;
