@@ -36,7 +36,7 @@ function [  net,res,opts ] = sgd(  net,res,opts )
             if ~isfield(net.layers{1,layer},'momentum')||(isfield(opts,'reset_mom')&&opts.reset_mom==1)
                 net.layers{1,layer}.momentum{1}=zeros(size(net.layers{1,layer}.weights{1}),'like',net.layers{1,layer}.weights{1});
                 net.layers{1,layer}.momentum{2}=zeros(size(net.layers{1,layer}.weights{2}),'like',net.layers{1,layer}.weights{2});
-                opts.reset_mom=0;
+                
             end
             net.layers{1,layer}.momentum{1}=opts.parameters.mom.*net.layers{1,layer}.momentum{1}-(1-opts.parameters.mom).*res(layer).dzdw- opts.parameters.weightDecay * net.layers{1,layer}.weights{1};
             net.layers{1,layer}.weights{1}=net.layers{1,layer}.weights{1}+opts.parameters.lr*net.layers{1,layer}.momentum{1}./mom_factor;
@@ -47,5 +47,8 @@ function [  net,res,opts ] = sgd(  net,res,opts )
         end
     end
    
+    if ~isfield(opts,'reset_mom')||opts.reset_mom==1
+        opts.reset_mom=0;
+    end
 end
 

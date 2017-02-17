@@ -11,8 +11,8 @@ function [lr_best,min_cost] = select_learning_rate(net,opts )
 
         net=temp_net;
         opts.parameters.lr=opts.parameters.lrs(l);%test the candidate learning rate
-        opts.reset_mom=1;
-        net.iterations=0;
+        %opts.reset_mom=1;
+        %net.iterations=0;
 
         if (isfield(opts.parameters,'selected_lr') && length(opts.parameters.selected_lr)>0 && opts.parameters.lr>opts.parameters.selected_lr(1)) 
 

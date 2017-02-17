@@ -2,17 +2,23 @@ function [ net,res,opts ] = net_bp( net,res,opts )
 %NET_FF Summary of this function goes here
 %   Detailed explanation goes here
 
-    if opts.use_gpu
-        opts.dzdy=gpuArray(single(opts.dzdy));
-    end    
+    if ~isfield(opts,'datatype')
+        opts.datatype='single';
+    end
+    opts.dzdy=cast(opts.dzdy,opts.datatype);
+        
     res(numel(net.layers)+1).dzdx = opts.dzdy ;
 
+    if opts.use_gpu
+        res(numel(net.layers)+1).dzdx=gpuArray(res(numel(net.layers)+1).dzdx);
+    end
+    
     for layer=numel(net.layers):-1:1
             
         opts.current_layer=layer;
         switch net.layers{layer}.type
 
-            case 'conv'
+             case {'conv','conv2d'}
                 if isfield(net.layers{1,layer},'stride')
                     if(length(net.layers{1,layer}.stride)==1)
                         net.layers{1,layer}.stride=ones(1,2)*net.layers{1,layer}.stride;
@@ -30,10 +36,10 @@ function [ net,res,opts ] = net_bp( net,res,opts )
                    net.layers{1,layer}.pad=[];
                 end
                 
-                [res(layer).dzdx, res(layer).dzdw,res(layer).dzdb,opts] = fast_conv_layer( res(layer).x,net.layers{1,layer}.weights{1},net.layers{1,layer}.weights{2},net.layers{1,layer}.stride,net.layers{1,layer}.pad,res(layer+1).dzdx,opts );
+                [res(layer).dzdx, res(layer).dzdw,res(layer).dzdb,opts] = conv_layer_2d( res(layer).x,net.layers{1,layer}.weights{1},net.layers{1,layer}.weights{2},net.layers{1,layer}.stride,net.layers{1,layer}.pad,res(layer+1).dzdx,opts );
                 
-            case 'mlp'                             
-                [res(layer).dzdx, res(layer).dzdw,res(layer).dzdb] = fast_mlp_layer( res(layer).x,net.layers{1,layer}.weights{1},net.layers{1,layer}.weights{2},res(layer+1).dzdx );
+            case {'mlp','linear'}                     
+                [res(layer).dzdx, res(layer).dzdw,res(layer).dzdb] = linear_layer( res(layer).x,net.layers{1,layer}.weights{1},net.layers{1,layer}.weights{2},res(layer+1).dzdx,opts);
             
             case 'dropout'
                 [res(layer).dzdx,~]= dropout(res(layer).x,res(layer+1).dzdx,net.layers{1,layer}.opts);
@@ -73,6 +79,8 @@ function [ net,res,opts ] = net_bp( net,res,opts )
 
             case 'softmaxloss'
                 res(layer).dzdx = softmaxlogloss(res(layer).x, res(1).class, res(layer+1).dzdx) ;
+            case 'softmax'        
+                res(layer).dzdx = softmax(res(layer).x,res(layer+1).dzdx) ;
 
 
         end

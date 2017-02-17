@@ -34,11 +34,11 @@ function [  net,res,opts ] = adam(  net,res,opts )
                 net.layers{1,layer}.momentum{3}=net.layers{1,layer}.momentum{1};%initialize
                 net.layers{1,layer}.momentum{4}=net.layers{1,layer}.momentum{2};%initialize
                 
-                opts.reset_mom=0;
             end
         end
      end
      
+    
     mom_factor=(1-opts.parameters.mom.^net.iterations);
     mom_factor2=(1-opts.parameters.mom2.^net.iterations);
     
@@ -60,5 +60,8 @@ function [  net,res,opts ] = adam(  net,res,opts )
         end
     end
    
+    if ~isfield(opts,'reset_mom')||opts.reset_mom==1
+        opts.reset_mom=0;
+    end
 end
 

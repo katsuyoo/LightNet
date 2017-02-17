@@ -1,4 +1,4 @@
-# LightNet: A Versatile, Standalone Matlab-based Environment for Deep Learning
+﻿# LightNet: A Versatile, Standalone Matlab-based Environment for Deep Learning
 
 Chengxi Ye, Chen Zhao, Yezhou Yang, Cornelia Fermüller, and Yiannis Aloimonos. 2016. LightNet: A Versatile, Standalone Matlab-based Environment for Deep Learning. In Proceedings of the 2016 ACM on Multimedia Conference (MM '16). Amsterdam, The Netherlands, 1156-1159. (http://dl.acm.org/citation.cfm?id=2973791)
 
@@ -16,9 +16,9 @@ Have fun!
 
 ## Recent updates
 
-RNN (with skip links) and GRU are added to the RNN directory. 
+CUDNN is supported by installing Neural Network Toolbox from Mathworks.
 
-LightNet now supports using pretrained ImageNet network models. 
+LightNet supports using pretrained ImageNet network models. 
 ![coco](coco.png)
 
 Check CNN/Main_CNN_ImageNet_Minimal()
@@ -35,8 +35,8 @@ adagrad: implementation of the Adagrad algorithm.
 adam: implementation of the Adam algorithm.  
 bnorm: implementation of the batch normalization layer.  
 dropout: implementation of the dropout layer.  
-fast_conv_layer: implementation of the convolution layer.  
-fast_mlp_layer: implementation of linear perceptron layer.  
+conv_layer_2d: implementation of the convolution layer.  
+linear_layer: implementation of linear perceptron layer.  
 generate_output_filename: generate output filename based on the current parameter settings.  
 im2col_ln: customized im2col function used in the pooling layer.  
 Main_Template: a template script used to train CNN and MLP networks.  
@@ -61,10 +61,8 @@ TrainingScript: a training template for CNN and MLP networks.
 
 ## How to accelerate LightNet
 
-CUDNN can be used to calculate convolutions. You will need to compile the vl_nnconv function provided by MatConvNet team.  
+Nvidia CUDNN can be used to calculate convolutions. 
 
-1. Please go to http://www.vlfeat.org/matconvnet/install/ to download.
-2. Copy the folder 'MatConvNet_Dir/matlab' into 'LightNet_Dir/CoreModules/matlab'.
-3. Try to compile MatConvNet in the LightNet directory (even though we only use one convolution function).   
-4. Set opts.use_cudnn=1 in the main tesing script.  
+1. You will need to install the Neural Network Toolbox from Mathworks.  
+2. Set opts.use_nntoolbox=1 in the main tesing script.  
 

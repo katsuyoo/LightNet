@@ -8,19 +8,20 @@ function [ net,y,dzdw,dzdb,opts ] = bnorm( net,x,layer_idx,dzdy,opts )
     end
     if ~isfield(net,'iterations_bn')
         net.iterations_bn=0; 
-    elseif isfield(net,'frame_iterations')
-        net.iterations_bn=net.frame_iterations;
     else
         net.iterations_bn=net.iterations;
     end
-    
     
     if ~isfield(net.layers{1,layer_idx},'weights')        
         sz=size(x);
         sz=[sz(1:end-1),1];
         if length(sz)==4
             sz(1:2)=1;
-        end        
+        end
+        if length(sz)==3
+            sz(1)=1;
+        end 
+        
         net.layers{1,layer_idx}.weights{1}=ones(sz,'like',x);
         for i=2:4
             net.layers{1,layer_idx}.weights{i}=zeros(sz,'like',x);
@@ -34,8 +35,6 @@ function [ net,y,dzdw,dzdb,opts ] = bnorm( net,x,layer_idx,dzdy,opts )
         opts.parameters.eps_bn=1e-2;
     end
     
-   
-
     if ~isfield(opts.parameters, 'mom_bn')
         opts.parameters.mom_bn=0.999;
     end
@@ -43,19 +42,27 @@ function [ net,y,dzdw,dzdb,opts ] = bnorm( net,x,layer_idx,dzdy,opts )
     if ~isfield(opts.parameters, 'simple_bn')
         opts.parameters.simple_bn=0;
     end
+    
+    if net.iterations_bn==0
+        for i=3:4
+            net.layers{1,layer_idx}.weights{i}=0;
+        end
+    end
     mom_factor=1-opts.parameters.mom_bn.^(net.iterations_bn+1);
     
-    if(length(size(x))>2)
-        batch_dim=4; 
-    else
-        batch_dim=2;
-    end
+    batch_dim=length(size(x));%% This assumes the batch size must be >1 
     
     if(opts.training&&isempty(dzdy))
         if batch_dim==4    
             net.layers{1,layer_idx}.weights{3}=opts.parameters.mom_bn*net.layers{1,layer_idx}.weights{3}+(1-opts.parameters.mom_bn)*mean(mean(mean(x,batch_dim),1),2);
             net.layers{1,layer_idx}.weights{4}=opts.parameters.mom_bn*net.layers{1,layer_idx}.weights{4}+(1-opts.parameters.mom_bn)*mean(mean(mean(abs(x).^2,batch_dim),1),2);
-        else
+        end
+        if batch_dim==3    
+            net.layers{1,layer_idx}.weights{3}=opts.parameters.mom_bn*net.layers{1,layer_idx}.weights{3}+(1-opts.parameters.mom_bn)*mean(mean(x,batch_dim),1);
+            net.layers{1,layer_idx}.weights{4}=opts.parameters.mom_bn*net.layers{1,layer_idx}.weights{4}+(1-opts.parameters.mom_bn)*mean(mean(abs(x).^2,batch_dim),1);
+        end
+        
+        if batch_dim==2
             net.layers{1,layer_idx}.weights{3}=opts.parameters.mom_bn*net.layers{1,layer_idx}.weights{3}+(1-opts.parameters.mom_bn)*mean(x,batch_dim);   
             net.layers{1,layer_idx}.weights{4}=opts.parameters.mom_bn*net.layers{1,layer_idx}.weights{4}+(1-opts.parameters.mom_bn)*mean(abs(x).^2,batch_dim);  
         end
@@ -64,22 +71,28 @@ function [ net,y,dzdw,dzdb,opts ] = bnorm( net,x,layer_idx,dzdy,opts )
             
     if(isempty(dzdy))
         
-        net.layers{opts.current_layer}.x_n=bsxfun(@minus,x,net.layers{1,layer_idx}.weights{3}./mom_factor);
-        net.layers{opts.current_layer}.x_n=bsxfun(@rdivide,net.layers{opts.current_layer}.x_n,(net.layers{1,layer_idx}.weights{4}./mom_factor+opts.parameters.eps_bn).^0.5);
+        net.layers{layer_idx}.x_n=bsxfun(@minus,x,net.layers{1,layer_idx}.weights{3}./mom_factor);
+        net.layers{layer_idx}.x_n=bsxfun(@rdivide,net.layers{layer_idx}.x_n,(net.layers{1,layer_idx}.weights{4}./mom_factor+opts.parameters.eps_bn).^0.5);
         
-        y=bsxfun(@times,net.layers{opts.current_layer}.x_n,net.layers{1,layer_idx}.weights{1});
+        y=bsxfun(@times,net.layers{layer_idx}.x_n,net.layers{1,layer_idx}.weights{1});
         y=bsxfun(@plus,y,net.layers{1,layer_idx}.weights{2});
         
+        %[mean(gather(y(:))),std(gather(y(:)))]
     else
-        dzdw=mean(dzdy.*net.layers{opts.current_layer}.x_n,batch_dim);
+        dzdw=mean(dzdy.*net.layers{layer_idx}.x_n,batch_dim);
         dzdb=mean(dzdy,batch_dim);
         
         denom=1;
         if batch_dim==4
             denom=size(dzdw,1)*size(dzdw,2);
             dzdw=sum(sum(dzdw,1),2);
-            dzdb=sum(sum(dzdb,1),2);
-            
+            dzdb=sum(sum(dzdb,1),2);            
+        end
+        
+        if batch_dim==3
+            denom=size(dzdw,1);
+            dzdw=sum(dzdw,1);
+            dzdb=sum(dzdb,1);            
         end
         
         if ~opts.parameters.simple_bn

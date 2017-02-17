@@ -4,7 +4,8 @@
 
 %
 clear all;
-
+SEED=1;
+rng(SEED);
 SHOW_ANIMATION=0;%%if you want to visualize, set this to 1.
 
 %%%%initialize the network
@@ -22,7 +23,7 @@ MaxUpdateDelay=50000;
 
 
 MAX_FAILURES  =  5000;      % Termination criterion. 
-MAX_STEPS   =     100000;
+MAX_STEPS   =     10000;
 
 TrainErr=[];
 MaxSteps=[];

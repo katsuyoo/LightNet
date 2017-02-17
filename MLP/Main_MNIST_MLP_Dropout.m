@@ -3,7 +3,7 @@ addpath(genpath('../CoreModules'));
 n_epoch=20; %training epochs
 dataset_name='mnist'; %dataset name
 network_name='mlp'; %network name
-use_gpu=1; %use gpu or not 
+use_gpu=0; %use gpu or not 
 
 %function handle to prepare your data
 PrepareDataFunc=@PrepareData_MNIST_MLP;

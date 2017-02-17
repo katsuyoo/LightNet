@@ -3,7 +3,7 @@ addpath(genpath('../CoreModules'));
 n_epoch=20; %training epochs
 dataset_name='mnist'; %dataset name
 network_name='mlp'; %network name
-use_gpu=1; %use gpu or not 
+use_gpu=0 %use gpu or not 
 
 %function handle to prepare your data
 PrepareDataFunc=@PrepareData_MNIST_MLP;
@@ -15,7 +15,7 @@ use_selective_sgd=1;
 %select a new learning rate every n epochs
 ssgd_search_freq=10; 
 learning_method=@rmsprop; %training method: @sgd,@rmsprop,@adagrad,@adam
-opts.parameters.mom=0.7;
+opts.parameters.mom=0.9;
 opts.parameters.clip=1e1;
 %sgd parameter 
 %(unnecessary if selective-sgd is used)

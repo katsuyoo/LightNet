@@ -7,6 +7,8 @@ NetInit=@net_init_mlp_mnist;
 use_selective_sgd=1;
 ssgd_search_freq=3;
 selection_reset_freq=3;
+asgd_reset_freq=10;
+asgd_lr=5e-2;
 sgd_lr=1e-2;
 opts.n_epoch=100;
 opts.LoadResults=0;
@@ -45,6 +47,9 @@ opts.dataset_name=dataset_name; %dataset name
 opts.network_name=network_name; %network name
 opts.use_gpu=use_gpu; %use gpu or not 
 
+if ~isfield(opts,'datatype')
+    opts.datatype ='single';
+end
 
 if ~isfield(opts,'LoadNet')
     %
@@ -65,16 +70,7 @@ opts.parameters.current_ep=1;
 opts.parameters.learning_method=learning_method;
 opts.parameters.selective_sgd=use_selective_sgd;%call selective-sgd
 
-if(~exist('init_train','var'))
-    init_train=0;
-end
 
-opts.parameters.init_train=init_train;
-
-
-if(~exist('selection_reset_freq','var'))
-    selection_reset_freq=0;
-end
 
 %selective-sgd parameters
 if opts.parameters.selective_sgd==1
@@ -82,12 +78,11 @@ if opts.parameters.selective_sgd==1
         opts.parameters.search_iterations=30;%iterations used to determine the learning rate
     end
     opts.parameters.ssgd_search_freq=ssgd_search_freq;%%search every n epoch
-    opts.parameters.selection_reset_freq=selection_reset_freq;%reset every n searches
     if ~isfield(opts.parameters,'lrs')
         
         opts.parameters.lrs =[1,0.5];%initialize selection range
         if ~strcmp(func2str(opts.parameters.learning_method),'sgd')
-            opts.parameters.lrs =opts.parameters.lrs.*1e-2;
+            opts.parameters.lrs =opts.parameters.lrs.*1e-1;
         end
         opts.parameters.lrs=[opts.parameters.lrs,opts.parameters.lrs*1e-1,opts.parameters.lrs*1e-2,opts.parameters.lrs*1e-3];%initialize selection range
     end
@@ -98,7 +93,6 @@ end
 if opts.parameters.selective_sgd==0
     opts.parameters.lr =sgd_lr;
 end
-
 
 
 %%sgd parameters

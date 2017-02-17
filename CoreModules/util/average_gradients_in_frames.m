@@ -12,13 +12,17 @@ for layer=1:length(Frames{1})
         Accum_Grad(layer).dzdw=Accum_Grad(layer).dzdw./n_frames;
     end
 
-    if isfield(Frames{1}(layer),'dzdb')&&~isempty(Frames{1}(layer).dzdb)
-        Accum_Grad(layer).dzdb=0;
-        for f=1:n_frames
-            Accum_Grad(layer).dzdb=Accum_Grad(layer).dzdb+Frames{f}(layer).dzdb;
-        end 
-        Accum_Grad(layer).dzdb=Accum_Grad(layer).dzdb./n_frames;
-    end        
+    if isfield(Frames{1}(layer),'dzdb')
+        if ~isempty(Frames{1}(layer).dzdb)
+            Accum_Grad(layer).dzdb=0;
+            for f=1:n_frames
+                Accum_Grad(layer).dzdb=Accum_Grad(layer).dzdb+Frames{f}(layer).dzdb;
+            end 
+            Accum_Grad(layer).dzdb=Accum_Grad(layer).dzdb./n_frames;
+        else
+            Accum_Grad(layer).dzdb=[];
+        end
+    end
 end
     
 

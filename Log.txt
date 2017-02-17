@@ -37,3 +37,6 @@
 20161010
 1. RNN network with skip links added in the RNN folder.
 2. Gated Recurrent Unit added in the RNN folder.
+20170217
+1. CUDNN is better supported by using Neural Network Toolbox from Mathworks.
+ 

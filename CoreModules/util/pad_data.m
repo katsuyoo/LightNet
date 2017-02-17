@@ -14,7 +14,7 @@ function [ y,dzdy ] = pad_data(  I,P,dzdy)
         new_size(1)=new_size(1)+P(1)+P(2);
         new_size(2)=new_size(2)+P(3)+P(4);
         y=zeros(new_size,'like',I);
-        y(1+P(1):1+P(1)+original_size(1)-1,1+P(3):1+P(3)+original_size(2)-1,:,:)=I;
+        y(1+P(1):P(1)+original_size(1),1+P(3):P(3)+original_size(2),:,:)=I;
 
     else
         %backward
@@ -22,8 +22,8 @@ function [ y,dzdy ] = pad_data(  I,P,dzdy)
         original_size=new_size;
         original_size(1)=original_size(1)-P(1)-P(2);
         original_size(2)=original_size(2)-P(3)-P(4);
-        y=I(1+P(1):1+P(1)+original_size(1)-1,1+P(3):1+P(3)+original_size(2)-1,:,:);
-        dzdy=dzdy(1+P(1):1+P(1)+original_size(1)-1,1+P(3):1+P(3)+original_size(2)-1,:,:);
+        y=I(1+P(1):P(1)+original_size(1),1+P(3):P(3)+original_size(2),:,:);
+        dzdy=dzdy(1+P(1):P(1)+original_size(1),1+P(3):P(3)+original_size(2),:,:);
         
     end
 

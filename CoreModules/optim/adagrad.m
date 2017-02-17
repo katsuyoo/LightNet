@@ -22,7 +22,6 @@ function [  net,res,opts ] = adagrad(  net,res,opts )
             if ~isfield(net.layers{1,layer},'momentum')||(isfield(opts,'reset_mom')&&opts.reset_mom==1)
                 net.layers{1,layer}.momentum{1}=zeros(size(net.layers{1,layer}.weights{1}),'like',net.layers{1,layer}.weights{1});
                 net.layers{1,layer}.momentum{2}=zeros(size(net.layers{1,layer}.weights{2}),'like',net.layers{1,layer}.weights{2});
-                opts.reset_mom=0;
             end
             
             net.layers{1,layer}.momentum{1}=net.layers{1,layer}.momentum{1}+res(layer).dzdw.^2;
@@ -34,5 +33,9 @@ function [  net,res,opts ] = adagrad(  net,res,opts )
         end
     end
    
+    if ~isfield(opts,'reset_mom')||opts.reset_mom==1
+        opts.reset_mom=0;
+    end
+    
 end
 

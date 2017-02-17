@@ -8,8 +8,7 @@ function [ opts ] = generate_output_filename( opts )
     opts.output_name=[opts.dataset_name,'-',opts.network_name];
 
     if opts.parameters.selective_sgd==1
-        opts.output_name=[opts.output_name,'-ssgd-search-freq-',num2str(opts.parameters.ssgd_search_freq)];    
-        opts.output_name=[opts.output_name,'-reset-',num2str(opts.parameters.selection_reset_freq)];
+        opts.output_name=[opts.output_name,'-ssgd-search-freq-',num2str(opts.parameters.ssgd_search_freq)];          
     end
     opts.output_name=[opts.output_name,'-',func2str(opts.parameters.learning_method)];
 
