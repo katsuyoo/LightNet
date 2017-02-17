@@ -27,7 +27,6 @@ An example recognition using imagenet-vgg-f pretrained net:
 
 ![ImageNet Icon](ImageNetPreTrain.png)
 
-Convolutions can be accelerated with CUDNN thanks to the work from the MatConvNet team.
 
 ## Major functions in LightNet
 
