@@ -16,7 +16,7 @@ Have fun!
 
 ## Recent updates
 
-CUDNN is supported by installing Neural Network Toolbox from Mathworks. The convolutional network training is over 10x faster than the previous release!
+- ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) CUDNN is supported by installing Neural Network Toolbox from Mathworks. The convolutional network training is over 10x faster than the previous release! The current version can process 10,000 CIFAR-10 images per second in the training.
 
 LightNet supports using pretrained ImageNet network models. 
 ![coco](coco.png)
@@ -64,4 +64,3 @@ Nvidia CUDNN can be used to calculate convolutions.
 
 1. You will need to install the Neural Network Toolbox from Mathworks.  
 2. Set opts.use_nntoolbox=1 in the main tesing script.  
-
