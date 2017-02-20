@@ -11,7 +11,8 @@ LightNet is a lightweight, versatile and purely Matlab-based deep learning frame
 Install the latest Matlab on a computer, and run the RunAll.m Matlab script. The computation can be accelerated by using an Nvidia GPU. And can be further accelerated by installing the Neural Network Toolbox Add-on.
  
 Read the latest documentation here:  
-http://arxiv.org/abs/1605.02766  
+http://arxiv.org/abs/1605.02766 
+and the attached tutorial slides.
 Have fun!  
 
 

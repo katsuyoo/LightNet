@@ -2,7 +2,7 @@ clear all;
 addpath(genpath('../CoreModules'));
 n_epoch=50;
 dataset_name='cifar';
-network_name='slow-cnn';
+network_name='cnn';
 use_gpu=1%use gpu or not 
 opts.use_nntoolbox=1 %Requires Neural Network Toolbox to use it.
 %function handle to prepare your data

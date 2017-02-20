@@ -1,16 +1,16 @@
 %%%%%%define your parameters here
 %{
 %%mnist mlp
-opts.dataset_name='mnist-mlp';
+opts.dataset_name='mnist';
+network_name='cnn'; %network name
+use_gpu=1; %use gpu or not
 PrepareDataFunc=@PrepareData_MNIST_MLP;
 NetInit=@net_init_mlp_mnist;
 use_selective_sgd=1;
-ssgd_search_freq=3;
-selection_reset_freq=3;
-asgd_reset_freq=10;
-asgd_lr=5e-2;
+ssgd_search_freq=10;
+learning_method=@sgd; %training method: @sgd,@adagrad,@rmsprop,@adam
 sgd_lr=1e-2;
-opts.n_epoch=100;
+opts.n_epoch=20;
 opts.LoadResults=0;
 %}
 
