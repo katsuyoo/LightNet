@@ -79,10 +79,9 @@ function [ net,y,dzdw,dzdb,opts ] = bnorm( net,x,layer_idx,dzdy,opts )
         denom=size(x,2)./shape_x(end);
         if ~opts.parameters.simple_bn
             %the complicated version
-            tmp=bsxfun(@times,dzdw./denom,x);
-            tmp=bsxfun(@plus,dzdb./denom,tmp);
-            dzdy=(dzdy-tmp.*(1-opts.parameters.mom_bn));
-            clear tmp;
+            x=bsxfun(@times,x,dzdw./denom);
+            x=bsxfun(@plus,x,dzdb./denom);
+            dzdy=(dzdy-x.*(1-opts.parameters.mom_bn));
             %[max(abs(dzdy(:))), max(abs(tmp(:)))]
         end
         

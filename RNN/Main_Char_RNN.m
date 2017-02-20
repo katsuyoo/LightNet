@@ -17,7 +17,7 @@ n_epoch=20;%20 %%training epochs
 dataset_name='char'; % dataset name
 network_name='lstm';%'gru';'rnn','lstm'
 use_gpu=0; %%use gpu or not 
-opts.use_cudnn=0;
+opts.use_nntoolbox=0;
 
 PrepareDataFunc=@PrepareData_Char_RNN; %%function handler to prepare your data
 

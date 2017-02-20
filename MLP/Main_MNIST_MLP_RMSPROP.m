@@ -4,7 +4,7 @@ n_epoch=20; %training epochs
 dataset_name='mnist'; %dataset name
 network_name='mlp'; %network name
 use_gpu=0 %use gpu or not 
-
+opts.use_nntoolbox=0
 %function handle to prepare your data
 PrepareDataFunc=@PrepareData_MNIST_MLP;
 %function handle to initialize the network

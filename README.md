@@ -8,7 +8,8 @@ LightNet is a lightweight, versatile and purely Matlab-based deep learning frame
 
 ## How to use LightNet
 
-Install the latest Matlab on a computer with an Nvidia GPU (at least 3GB GPU memory), and run the RunAll.m Matlab script.  
+Install the latest Matlab on a computer, and run the RunAll.m Matlab script. The computation can be accelerated by using an Nvidia GPU. And can be further accelerated by installing the Neural Network Toolbox Add-on.
+ 
 Read the latest documentation here:  
 http://arxiv.org/abs/1605.02766  
 Have fun!  
@@ -33,11 +34,10 @@ An example recognition using imagenet-vgg-f pretrained net:
 adagrad: implementation of the Adagrad algorithm.  
 adam: implementation of the Adam algorithm.  
 bnorm: implementation of the batch normalization layer.  
-dropout: implementation of the dropout layer.  
 conv_layer_2d: implementation of the convolution layer.  
-linear_layer: implementation of linear perceptron layer.  
+dropout: implementation of the dropout layer.  
 generate_output_filename: generate output filename based on the current parameter settings.  
-im2col_ln: customized im2col function used in the pooling layer.  
+im2col_ln: customized im2col function used in the pooling layer. linear_layer: implementation of linear perceptron layer.   
 Main_Template: a template script used to train CNN and MLP networks.  
 lrn: implementation of the local response normalization layer.  
 maxpool: implementation of the max-pooling layer.  
@@ -62,5 +62,5 @@ TrainingScript: a training template for CNN and MLP networks.
 
 Nvidia CUDNN can be used to calculate convolutions. 
 
-1. You will need to install the Neural Network Toolbox from Mathworks.  
+1. You will need to install the Neural Network Toolbox from Mathworks. Make sure you can run it properly. (Ref to the tutorial "Transfer Learning Using Convolutional Neural Networks" in the toolbox.)  
 2. Set opts.use_nntoolbox=1 in the main tesing script.  
