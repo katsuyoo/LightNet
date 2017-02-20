@@ -43,9 +43,11 @@ function [ net,y,dzdw,dzdb,opts ] = bnorm( net,x,layer_idx,dzdy,opts )
         end        
     end
     
-    if (net.iterations_bn==0||opts.reset_mom==1||length(net.layers{1,layer_idx}.weights)<4) && isempty(dzdy)
-        for i=3:4
-            net.layers{1,layer_idx}.weights{i}=0;
+    if (opts.training&&isempty(dzdy))
+        if(net.iterations_bn==0||(isfield(opts,'reset_mom')&&opts.reset_mom==1)||length(net.layers{1,layer_idx}.weights)<4)  
+            for i=3:4
+                net.layers{1,layer_idx}.weights{i}=0;
+            end
         end
     end    
     mom_factor=1-opts.parameters.mom_bn.^(net.iterations_bn+1);
