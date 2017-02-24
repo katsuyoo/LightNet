@@ -56,3 +56,11 @@ for ep=start_ep:opts.n_epoch
     save([fullfile(opts.output_dir2,[opts.output_name2,num2str(ep),'.mat'])],'net','parameters','results');     
 end
 
+
+[min_err,min_id]=min(opts.results.TestEpochError);
+disp(['Lowest error rate: ',num2str(min_err)]);
+best_net_source=[fullfile(opts.output_dir2,[opts.output_name2,num2str(min_id),'.mat'])];
+best_net_destination=[fullfile(opts.output_dir2,['best_',opts.output_name2,'.mat'])];
+copyfile(best_net_source,best_net_destination);
+
+

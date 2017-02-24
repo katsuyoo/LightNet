@@ -63,5 +63,5 @@ TrainingScript: a training template for CNN and MLP networks.
 
 Nvidia CUDNN can be used to calculate convolutions. 
 
-1. You will need to install the Neural Network Toolbox from Mathworks. Make sure you can run it properly. (Ref to the tutorial "Transfer Learning Using Convolutional Neural Networks" in the toolbox.)  
+1. You will need to install the Neural Network Toolbox from Mathworks. Make sure you can run it properly. (Ref to our tutorial slides.)  
 2. Set opts.use_nntoolbox=1 in the main tesing script.  

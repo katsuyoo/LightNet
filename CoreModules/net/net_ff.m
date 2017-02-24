@@ -52,7 +52,7 @@ function [ net,res,opts ] = net_ff( net,res,opts )
             case 'bnorm'
                 [net,res(layer+1).x,~,~,opts] = bnorm( net,res(layer).x,layer,[],opts );
             case {'normalize', 'lrn'}
-                res(layer+1).x = lrn(res(layer).x, net.layers{1,layer}.param(1),net.layers{1,layer}.param(2),net.layers{1,layer}.param(3),net.layers{1,layer}.param(4),[]) ;
+                [res(layer+1).x,opts] = lrn(res(layer).x, net.layers{1,layer}.param(1),net.layers{1,layer}.param(2),net.layers{1,layer}.param(3),net.layers{1,layer}.param(4),[],opts) ;
             
             case 'relu'
                 res(layer+1).x = relu(res(layer).x,[] );

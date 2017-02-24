@@ -7,25 +7,6 @@ dzdb=[];
 
 flip_kernel=0;
 
-if isfield(opts,'use_cudnn')&&opts.use_cudnn==1 %
-    
-    if isfield(opts,'use_corr')&&opts.use_corr==0
-       kernel=flip(flip(kernel,1),2);
-       flip_kernel=1;
-    end
-    
-    if isempty(dzdy)    
-        y = vl_nnconv(I, kernel, bias,'pad',pad,'stride',stride);        
-    else       
-        [y,dzdw,dzdb]= vl_nnconv(I, kernel, bias, dzdy, 'pad',pad,'stride',stride);
-        dzdw=dzdw./opts.parameters.batch_size;
-        dzdb=dzdb./opts.parameters.batch_size;
-        if(flip_kernel)
-            dzdw=flip(flip(dzdw,1),2);
-        end
-    end
-    return;
-end
 
 if isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1 %
     
@@ -35,32 +16,37 @@ if isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1 %
     end
     
     kernel_sz=size(kernel);
- 
+    if isempty(pad),pad=[0,0,0,0];end
+    PADDING_MODE=0;
+    if pad(1)~=pad(2)||pad(3)~=pad(4)    
+       [i1,i2,in,b]=size(I);  
+       I = pad_data(I,pad,[]);
+       pad2=pad;
+       pad=[0,0,0,0];
+       PADDING_MODE=1;
+    end
+    
    %nntb interface: nnet.internal.cnn.layer.Convolution2D(name, filterSize, numChannels, numFilters, stride, padding);
- 
-   
     if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'conv2d_nntb')
-        opts.layer{opts.current_layer}.conv2d_nntb=nnet.internal.cnn.layer.Convolution2D('conv2d_nntb', [kernel_sz(1),kernel_sz(2)], kernel_sz(3) ,kernel_sz(4), [stride(1),stride(2)], [pad(1),pad(3)]);
-   
+        opts.layer{opts.current_layer}.conv2d_nntb=nnet.internal.cnn.layer.Convolution2D('conv2d_nntb', [kernel_sz(1),kernel_sz(2)], kernel_sz(3) ,kernel_sz(4), [stride(1),stride(2)], pad(1:2:end));
     end
 
     conv2d_nntb=opts.layer{opts.current_layer}.conv2d_nntb;
     conv2d_nntb.Weights.Value=kernel;
     conv2d_nntb.Bias.Value=permute(bias(:),[3,4,1,2]);    
-    if isempty(dzdy)  
-        try
-        y=conv2d_nntb.forward(I);
-        catch
-            ''
-        end
-    else 
+
+    if isempty(dzdy)
         
+        y=conv2d_nntb.forward(I);    
+    else         
         y = conv2d_nntb.backward( I, [], dzdy, [] );
+        if PADDING_MODE==1
+           pad=pad2;
+           y=y(1+pad(1):pad(1)+i1,1+pad(3):pad(3)+i2,:,:);
+        end
         gradients = conv2d_nntb.gradients(I, dzdy);
-        dzdw=gradients{1};
-        dzdw=dzdw./opts.parameters.batch_size;
-        dzdb=reshape(gradients{2},size(bias));
-        dzdb=dzdb./opts.parameters.batch_size;
+        dzdw=gradients{1}./opts.parameters.batch_size;
+        dzdb=reshape(gradients{2}./opts.parameters.batch_size,size(bias));
         if(flip_kernel)
             dzdw=flip(flip(dzdw,1),2);
         end

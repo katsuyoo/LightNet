@@ -1,9 +1,18 @@
 function [ y,from,opts ] = maxpool( I, K, S,pad,dzdy,from,opts )
 
 if opts.use_nntoolbox==1
+    if isempty(pad),pad=[0,0,0,0];end
+    
+    PADDING_MODE=0;
+    if pad(1)~=pad(2)||pad(3)~=pad(4)    
+       [i1,i2,in,b]=size(I);  
+       I = pad_data(I,pad,[]);
+       pad2=pad;
+       pad=[0,0,0,0];
+       PADDING_MODE=1;
+    end
     
     if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'maxpool2d_nntb')
-        if isempty(pad),pad=[0,0,0,0];end
         if length(K)==1,K=[K,K];end
         opts.layer{opts.current_layer}.maxpool_nntb = nnet.internal.cnn.layer.MaxPooling2D( 'maxpool2d_nntb', K,S,pad(1:2:end));
     end    
@@ -14,6 +23,10 @@ if opts.use_nntoolbox==1
         from=y;
     else
         y= maxpool_nntb.backward( I, from, dzdy, []);
+        if PADDING_MODE==1
+           pad=pad2;
+           y=y(1+pad(1):pad(1)+i1,1+pad(3):pad(3)+i2,:,:);
+        end
     end    
     return;
 end
@@ -75,8 +88,8 @@ else
     %dzdy=gather(dzdy);
     
     input_size=size(I);
-    original_size_r=input_size(1);
-    original_size_c=input_size(2);
+    i1=input_size(1);
+    i2=input_size(2);
     
     if(~isempty(pad))
         input_size(1)=input_size(1)+pad(1)+pad(2);
@@ -104,7 +117,7 @@ else
     
          
     if(~isempty(pad))
-        y=y(1+pad(1):1+pad(1)+original_size_r-1,1+pad(3):1+pad(3)+original_size_c-1,:,:);
+        y=y(1+pad(1):pad(1)+i1,1+pad(3):pad(3)+i2,:,:);
     end
     
 end

@@ -1,6 +1,23 @@
-function [ y ] = lrn( x,N,kappa,alpha,beta,dzdy )
+function [ y,opts] = lrn( x,N,kappa,alpha,beta,dzdy,opts)
 %LRN Summary of this function goes here
 %   Detailed explanation goes here
+
+    if opts.use_nntoolbox==1
+        if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'lrn_nntb')
+            opts.layer{opts.current_layer}.lrn_nntb = nnet.internal.cnn.layer.LocalMapNorm2D( 'lrn_nntb', N,alpha,beta,kappa);
+        end   
+        lrn_nntb=opts.layer{opts.current_layer}.lrn_nntb ;
+
+        if isempty(dzdy)
+            y=lrn_nntb.forward(x);
+        else
+            y=lrn_nntb.forward(x);
+            y=lrn_nntb.backward(x,y,dzdy,[]);
+        end    
+
+       return; 
+    end
+    
     sz=size(x);
     if (length(sz)>2)
         channel_dim=3; Index={':',':'};%cnn
