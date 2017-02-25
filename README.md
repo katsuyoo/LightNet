@@ -39,6 +39,7 @@ net_ff: implementation of the feed forward process which is used in CNN and MLP 
 test_net: running the network in the testing mode to evaluate the current parameters.  
 train_net: running the network in the training mode to evaluate and calculate the loss and gradients.  
 TrainingScript: a training template for CNN and MLP networks.  
+net_init*: how to initialize a neural network.  
   
 ####layers:
 bnorm: implementation of the batch normalization layer.  
