@@ -31,33 +31,44 @@ An example recognition using imagenet-vgg-f pretrained net:
 
 
 ## Major functions in LightNet
-
-adagrad: implementation of the Adagrad algorithm.  
-adam: implementation of the Adam algorithm.  
-bnorm: implementation of the batch normalization layer.  
-conv_layer_2d: implementation of the convolution layer. (CUDNN enabled)  
-dropout: implementation of the dropout layer.  
-generate_output_filename: generate output filename based on the current parameter settings.  
-im2col_ln: customized im2col function used in the pooling layer.  
-linear_layer: implementation of (fully-connected) linear layer. (CUDNN enabled)   
-lrn: implementation of the local response normalization layer. (CUDNN enabled)  
+  
+####network related:
 Main_Template: a template script used to train CNN and MLP networks.  
-maxpool: implementation of the max-pooling layer. (CUDNN enabled)  
 net_bp: implementation of the back propagation process which is used in CNN and MLP networks.  
 net_ff: implementation of the feed forward process which is used in CNN and MLP networks.  
-pad_data: a padding layer which is used in CNN.  
-relu: implementation of the rectified linear unit function.  
-rmsprop: implementation of the RMSProp algorithm.  
-select_learning_rate: implementation of the Selective-SGD algorithm that automatically selects the optimal learning rate at the beginning or in the middle of the training.  
-sgd: implementation of the stochastic gradient descent algorithm with momentum.  
-sigmoid_ln: implementation of the sigmoid layer.  
-softmax: implementation of the softmax layer.  
-softmaxlogloss: implementation of the softmax log loss layer .  
-SwitchProcessor: a switch function between CPU and GPU.  
-tanh_ln: implementation of the tanh layer.  
 test_net: running the network in the testing mode to evaluate the current parameters.  
 train_net: running the network in the training mode to evaluate and calculate the loss and gradients.  
 TrainingScript: a training template for CNN and MLP networks.  
+  
+####layers:
+bnorm: implementation of the batch normalization layer.  
+conv_layer_2d: implementation of the convolution layer. (CUDNN enabled)  
+dropout: implementation of the dropout layer.  
+linear_layer: implementation of (fully-connected) linear layer. (CUDNN enabled)   
+lrn: implementation of the local response normalization layer. (CUDNN enabled)  
+maxpool: implementation of the max-pooling layer. (CUDNN enabled)  
+relu: implementation of the rectified linear unit function.  
+sigmoid_ln: implementation of the sigmoid layer.  
+tanh_ln: implementation of the tanh layer.  
+  
+####loss functions:
+softmax: implementation of the softmax layer.  
+softmaxlogloss: implementation of the softmax log loss layer .  
+  
+####optimization related:
+adagrad: implementation of the Adagrad algorithm.  
+adam: implementation of the Adam algorithm.  
+rmsprop: implementation of the RMSProp algorithm.  
+select_learning_rate: implementation of the Selective-SGD algorithm that automatically selects the optimal learning rate at the beginning or in the middle of the training.  
+sgd: implementation of the stochastic gradient descent algorithm with momentum.  
+  
+####utility functions:
+generate_output_filename: generate output filename based on the current parameter settings.  
+im2col_ln: customized im2col function used in the pooling layer.  
+pad_data: a padding layer which is used in CNN.  
+SwitchProcessor: a switch function between CPU and GPU.  
+
+
 
 
 ## How to accelerate LightNet
