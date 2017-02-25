@@ -35,14 +35,14 @@ An example recognition using imagenet-vgg-f pretrained net:
 adagrad: implementation of the Adagrad algorithm.  
 adam: implementation of the Adam algorithm.  
 bnorm: implementation of the batch normalization layer.  
-conv_layer_2d: implementation of the convolution layer. (CUDNN enabled)     
+conv_layer_2d: implementation of the convolution layer. (CUDNN enabled)  
 dropout: implementation of the dropout layer. 
 generate_output_filename: generate output filename based on the current parameter settings.  
 im2col_ln: customized im2col function used in the pooling layer. linear_layer: implementation of linear perceptron layer.   
 Main_Template: a template script used to train CNN and MLP networks.
-linear_layer: implementation of the (fully connected) linear layer. (CUDNN enabled)      
-lrn: implementation of the local response normalization layer. (CUDNN enabled)      
-maxpool: implementation of the max-pooling layer. (CUDNN enabled)     
+linear_layer: implementation of the (fully connected) linear layer. (CUDNN enabled)  
+lrn: implementation of the local response normalization layer. (CUDNN enabled)  
+maxpool: implementation of the max-pooling layer. (CUDNN enabled)  
 net_bp: implementation of the back propagation process which is used in CNN and MLP networks.  
 net_ff: implementation of the feed forward process which is used in CNN and MLP networks.  
 pad_data: a padding layer which is used in CNN.  
