@@ -38,6 +38,8 @@
 1. RNN network with skip links added in the RNN folder.
 2. Gated Recurrent Unit added in the RNN folder.
 20170217
-1. CUDNN is better supported by using Neural Network Toolbox from Mathworks. (CNN part)
+1. CUDNN is better supported by using Neural Network Toolbox from Mathworks. (conv_layer, maxpool)
 20170219
 1. CUDNN is enabled in the linear layer computation (MLP network).
+20170224
+1. CUDNN is enabled in lrn. 
