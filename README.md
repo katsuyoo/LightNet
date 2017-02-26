@@ -50,10 +50,10 @@ lrn: implementation of the local response normalization layer. (CUDNN enabled)
 maxpool: implementation of the max-pooling layer. (CUDNN enabled)  
 relu: implementation of the rectified linear unit function.  
 sigmoid_ln: implementation of the sigmoid layer.  
+softmax: implementation of the softmax layer.  
 tanh_ln: implementation of the tanh layer.  
   
 ####loss functions:
-softmax: implementation of the softmax layer.  
 softmaxlogloss: implementation of the softmax log loss layer .  
   
 ####optimization related:
