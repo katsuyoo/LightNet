@@ -90,7 +90,7 @@ function [ net,res,opts ] = net_ff( net,res,opts )
             case 'softmaxloss'
                 res(layer+1).x = softmaxlogloss(res(layer).x, res(1).class) ;               
             case 'softmax'        
-                res(layer+1).x = softmax(res(layer).x) ;
+                res(layer+1).x = softmax(res(layer).x,[]) ;
            
         end
     end
