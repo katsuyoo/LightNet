@@ -10,6 +10,7 @@ function [net,opts]=train_net(net,opts)
         opts.display_msg=1; 
     end
     opts.MiniBatchError=[];
+    opts.MiniBatchError_Top5=[];
     opts.MiniBatchLoss=[];
 
     tic
@@ -51,13 +52,16 @@ function [net,opts]=train_net(net,opts)
         
         
         %%summarize the current batch
-        err=error_multiclass(res(1).class,res);
         loss=gather(mean(res(end).x(:)));
-        
-        if opts.display_msg==1
-            disp(['Minibatch error: ', num2str(err(1)./opts.parameters.batch_size),' Minibatch loss: ', num2str(loss)])
-        end
+        err=error_multiclass(res(1).class,res);
         opts.MiniBatchError=[opts.MiniBatchError;err(1)/opts.parameters.batch_size];
+        opts.MiniBatchError_Top5=[opts.MiniBatchError_Top5;err(2)/opts.parameters.batch_size];
+        if opts.display_msg==1
+            disp(['Minibatch loss: ', num2str(loss),...
+                ', top 1 err: ', num2str(opts.MiniBatchError(end)),...
+                ',top 5 err:,',num2str(opts.MiniBatchError_Top5(end))])
+        end
+       
         opts.MiniBatchLoss=[opts.MiniBatchLoss;loss];                 
         if (~isfield(opts.parameters,'iterations'))
             opts.parameters.iterations=0; 
@@ -75,11 +79,20 @@ function [net,opts]=train_net(net,opts)
     
     %%summarize the current epoch
     opts.results.TrainEpochError=[opts.results.TrainEpochError;mean(opts.MiniBatchError(:))];
+    opts.results.TrainEpochError_Top5=[opts.results.TrainEpochError_Top5;mean(opts.MiniBatchError_Top5(:))];
     opts.results.TrainEpochLoss=[opts.results.TrainEpochLoss;mean(opts.MiniBatchLoss(:))];
     
+    if isfield(opts,'train_labels')
+         disp(['Epoch ',num2str(opts.parameters.current_ep),...
+         ', training loss: ', num2str(opts.results.TrainEpochLoss(end)),...
+                ', top 1 err: ', num2str(opts.results.TrainEpochError(end)),...
+                ',top 5 err:,',num2str(opts.results.TrainEpochError_Top5(end))])                
+    end
+
     if opts.RecordStats==1
         opts.results.TrainLoss=[opts.results.TrainLoss;opts.MiniBatchLoss];
         opts.results.TrainError=[opts.results.TrainError;opts.MiniBatchError]; 
+        opts.results.TrainError_Top5=[opts.results.TrainError_Top5;opts.MiniBatchError_Top5]; 
     end
     
     toc;

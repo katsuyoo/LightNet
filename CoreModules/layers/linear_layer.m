@@ -1,4 +1,4 @@
-function [ y, dzdw,dzdb ] = linear_layer( I,weight,bias,dzdy,opts)
+function [ y, dzdw,dzdb,opts ] = linear_layer( I,weight,bias,dzdy,opts)
 %FAST_MLP_LAYER Summary of this function goes here
 %   Detailed explanation goes here
 %I: input_dim x batch_size

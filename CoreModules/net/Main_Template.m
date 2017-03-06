@@ -52,9 +52,9 @@ if ~isfield(opts,'datatype')
 end
 
 if ~isfield(opts,'LoadNet')
-    %
+    opts.LoadNet=0;
 end
-opts.LoadNet=0;
+
 
 opts.dataDir=['./',opts.dataset_name,'/'];
 opts=PrepareDataFunc(opts);

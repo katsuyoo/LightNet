@@ -15,18 +15,12 @@ function [ opts ] = generate_output_filename( opts )
     if opts.parameters.selective_sgd==0  
         opts.output_name=[opts.output_name,'-lr-',num2str(opts.parameters.lr)];
     end
-
-
-    if strcmp(func2str(opts.parameters.learning_method),'adaptive_sgd')||strcmp(func2str(opts.parameters.learning_method),'adaptive_sgd_ew')
-        opts.output_name=[opts.output_name,'-asgd_lr-',num2str(opts.parameters.asgd_lr),'-reset-',num2str(opts.parameters.asgd_reset_freq)];
-    end
-
     
     opts.output_name2=[opts.output_name,'-epoch-'];
     opts.output_dir2=['./',opts.dataset_name,'-tests/temp/'];
 
-    opts.output_name=[opts.output_name,'-epoch-',num2str(opts.n_epoch),'.mat'];    
-    opts.output_dir=['./',opts.dataset_name,'-tests/'];
+    opts.output_name=[opts.output_name,'-epoch-*.mat'];    
+    opts.output_dir=['./',opts.dataset_name,'-tests/temp/'];
     
     if ~exist(opts.output_dir,'dir')
         mkdir(opts.output_dir)

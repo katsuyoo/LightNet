@@ -37,7 +37,7 @@ function [ net,res,opts ] = net_ff( net,res,opts )
                 [res(layer+1).x,~,~,opts] = conv_layer_2d( res(layer).x,net.layers{1,layer}.weights{1},net.layers{1,layer}.weights{2},net.layers{1,layer}.stride,net.layers{1,layer}.pad,[],opts );
                 
             case {'mlp','linear'} 
-                [res(layer+1).x,~,~] = linear_layer( res(layer).x,net.layers{1,layer}.weights{1},net.layers{1,layer}.weights{2},[], opts);
+                [res(layer+1).x,~,~,opts] = linear_layer( res(layer).x,net.layers{1,layer}.weights{1},net.layers{1,layer}.weights{2},[], opts);
 
             case 'dropout'
                 if opts.training
