@@ -15,6 +15,12 @@ if opts.use_nntoolbox==1
     if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'maxpool2d_nntb')
         if length(K)==1,K=[K,K];end
         opts.layer{opts.current_layer}.maxpool_nntb = nnet.internal.cnn.layer.MaxPooling2D( 'maxpool2d_nntb', K,S,pad(1:2:end));
+        if opts.use_gpu
+            opts.layer{opts.current_layer}.maxpool_nntb = setupForGPUPrediction(opts.layer{opts.current_layer}.maxpool_nntb);
+            else
+            opts.layer{opts.current_layer}.maxpool_nntb =setupForHostPrediction(opts.layer{opts.current_layer}.maxpool_nntb);
+        end
+        
     end    
     maxpool_nntb=opts.layer{opts.current_layer}.maxpool_nntb ;
     

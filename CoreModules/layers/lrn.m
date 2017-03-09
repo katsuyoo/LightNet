@@ -5,6 +5,11 @@ function [ y,opts] = lrn( x,N,kappa,alpha,beta,dzdy,opts)
     if opts.use_nntoolbox==1
         if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'lrn_nntb')
             opts.layer{opts.current_layer}.lrn_nntb = nnet.internal.cnn.layer.LocalMapNorm2D( 'lrn_nntb', N,alpha,beta,kappa);
+            if opts.use_gpu
+                opts.layer{opts.current_layer}.lrn_nntb = setupForGPUPrediction(opts.layer{opts.current_layer}.lrn_nntb);                
+            else
+                opts.layer{opts.current_layer}.lrn_nntb =setupForHostPrediction(opts.layer{opts.current_layer}.lrn_nntb);
+            end
         end   
         lrn_nntb=opts.layer{opts.current_layer}.lrn_nntb ;
 

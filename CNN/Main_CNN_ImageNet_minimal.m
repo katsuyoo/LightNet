@@ -19,8 +19,8 @@ im_ = bsxfun(@minus,im_ , net.meta.normalization.averageImage) ;
 
 % run the CNN
 opts=[];
-opts.use_gpu=0;%unless you have a good gpu
-opts.use_nntoolbox=0; %Requires Neural Network Toolbox to use it.
+opts.use_gpu=1;%unless you have a good gpu
+opts.use_nntoolbox=1; %Requires Neural Network Toolbox to use it.
 
 opts.training=0;
 opts.use_corr=1;

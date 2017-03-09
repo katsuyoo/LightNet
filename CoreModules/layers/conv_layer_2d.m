@@ -29,6 +29,11 @@ if isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1 %
    %nntb interface: nnet.internal.cnn.layer.Convolution2D(name, filterSize, numChannels, numFilters, stride, padding);
     if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'conv2d_nntb')
         opts.layer{opts.current_layer}.conv2d_nntb=nnet.internal.cnn.layer.Convolution2D('conv2d_nntb', [kernel_sz(1),kernel_sz(2)], kernel_sz(3) ,kernel_sz(4), [stride(1),stride(2)], pad(1:2:end));
+        if opts.use_gpu
+            opts.layer{opts.current_layer}.conv2d_nntb = setupForGPUPrediction(opts.layer{opts.current_layer}.conv2d_nntb);
+        else
+            opts.layer{opts.current_layer}.conv2d_nntb =setupForHostPrediction(opts.layer{opts.current_layer}.conv2d_nntb);
+        end
     end
 
     conv2d_nntb=opts.layer{opts.current_layer}.conv2d_nntb;

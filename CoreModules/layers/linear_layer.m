@@ -12,6 +12,11 @@ if exist('opts','var')&&isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1
     %use nntoolbox
     if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'fc_nntb')
         opts.layer{opts.current_layer}.fc_nntb=nnet.internal.cnn.layer.Convolution2D('conv2d_nntb', [1,1], in ,out, [1,1], [0,0]);
+        if opts.use_gpu
+            opts.layer{opts.current_layer}.fc_nntb = setupForGPUPrediction(opts.layer{opts.current_layer}.fc_nntb);
+        else
+            opts.layer{opts.current_layer}.fc_nntb =setupForHostPrediction(opts.layer{opts.current_layer}.fc_nntb);
+        end
     end
     fc_nntb=opts.layer{opts.current_layer}.fc_nntb;
     if ~isempty(bias) 
