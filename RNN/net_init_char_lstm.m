@@ -36,14 +36,3 @@ net{4}.layers = {};
 net{4}.layers{end+1} = struct('type', 'mlp', ...
                            'weights', {{f*randn(n_output_nodes,n_hidden_nodes, 'single'), zeros(n_output_nodes,1,'single')}}) ;
 net{4}.layers{end+1} = struct('type', 'softmaxloss');                       
-
-for n=1:length(net)
-
-    for i=1:numel(net{n}.layers)
-        if strcmp(net{n}.layers{i}.type,'conv')||strcmp(net{n}.layers{i}.type,'mlp')
-            net{n}.layers{1,i}.momentum{1}=zeros(size(net{n}.layers{1,i}.weights{1}));
-            net{n}.layers{1,i}.momentum{2}=zeros(size(net{n}.layers{1,i}.weights{2}));
-        end
-    end
-
-end

@@ -15,7 +15,7 @@ if isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1 %
        flip_kernel=1;
     end
     
-    kernel_sz=size(kernel);
+    [k1,k2,k3,k4]=size(kernel);
     if isempty(pad),pad=[0,0,0,0];end
     PADDING_MODE=0;
     if pad(1)~=pad(2)||pad(3)~=pad(4)    
@@ -28,7 +28,7 @@ if isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1 %
     
    %nntb interface: nnet.internal.cnn.layer.Convolution2D(name, filterSize, numChannels, numFilters, stride, padding);
     if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'conv2d_nntb')
-        opts.layer{opts.current_layer}.conv2d_nntb=nnet.internal.cnn.layer.Convolution2D('conv2d_nntb', [kernel_sz(1),kernel_sz(2)], kernel_sz(3) ,kernel_sz(4), [stride(1),stride(2)], pad(1:2:end));
+        opts.layer{opts.current_layer}.conv2d_nntb=nnet.internal.cnn.layer.Convolution2D('conv2d_nntb', [k1,k2], k3 ,k4, [stride(1),stride(2)], pad(1:2:end));
         if opts.use_gpu
             opts.layer{opts.current_layer}.conv2d_nntb = setupForGPUPrediction(opts.layer{opts.current_layer}.conv2d_nntb);
         else
