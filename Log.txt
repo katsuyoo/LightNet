@@ -43,3 +43,5 @@
 1. CUDNN is enabled in the linear layer computation (MLP network).
 20170224
 1. CUDNN is enabled in lrn. 
+20170328
+1. Thanks to the help from Mathworks (J.H. Wang) we have used the implicit expansion feature (introduced in Matlab R2016b) to replace bsxfun in LightNet. 

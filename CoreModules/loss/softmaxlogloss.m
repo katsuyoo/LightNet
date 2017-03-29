@@ -6,7 +6,7 @@ if(length(size(X))<=2),idx_c=1;end%mlp
 n_class=size(X,idx_c);
 
 Xmax = max(X,[],idx_c) ;
-E = exp(bsxfun(@minus, X, Xmax)) ;
+E = exp(X- Xmax) ;
 S=sum(E,idx_c);
 GT_idx=c(:)'+n_class*[0:size(X,idx_c+1)-1];%ground truth idx   
 if ~exist('dzdy','var')||isempty(dzdy)
@@ -16,9 +16,9 @@ if ~exist('dzdy','var')||isempty(dzdy)
     %Y = sum(Y,idx_c+1);% sum of batch loss
 else
     %bp
-    Y = bsxfun(@rdivide, E, S) ;
+    Y = E./S ;
     Y(GT_idx)=Y(GT_idx)-1;
-    if dzdy~=1.0, Y = bsxfun(@times, Y, dzdy);end
+    if dzdy~=1.0, Y = Y.* dzdy;end
 end
 
 

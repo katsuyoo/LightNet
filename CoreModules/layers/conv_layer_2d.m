@@ -92,7 +92,7 @@ if isempty(dzdy)
     y=zeros(i1,i2,out,b,'like',I);
     
     for o=1:out
-        fft_conv=bsxfun(@times,opts.layer{opts.current_layer}.fI,opts.layer{opts.current_layer}.fk(:,:,:,o));
+        fft_conv=opts.layer{opts.current_layer}.fI.*opts.layer{opts.current_layer}.fk(:,:,:,o);
         y(:,:,o,:)=sum(fft_conv,3);
     end
     y=real(ifft2(y));     
@@ -100,7 +100,7 @@ if isempty(dzdy)
     y = y(k1:end,k2:end,:,:);
     if ~isempty(bias)
         bias_p=permute(bias(:),[4,3,1,2]);% check this
-        y=bsxfun(@plus,y,bias_p);
+        y=y+bias_p;
     end
     
     
@@ -136,7 +136,7 @@ else
     fk=permute(opts.layer{opts.current_layer}.fk,[1,2,4,3]);
     
     for i=1:in        
-        fft_corr=bsxfun(@times,fdzdy,conj(fk(:,:,:,i)));
+        fft_corr=fdzdy.*conj(fk(:,:,:,i));
         y(:,:,i,:)=sum(fft_corr,3);
     end
     y=real(ifft2(y));
@@ -156,7 +156,7 @@ else
     
     for o=1:out
         
-        fft_corr=bsxfun(@times,opts.layer{opts.current_layer}.fI,conj(fdzdy(:,:,o,:)));
+        fft_corr=opts.layer{opts.current_layer}.fI.*conj(fdzdy(:,:,o,:));
         fft_corr=mean(fft_corr,4); %minibatch averaging
         fft_corr=real(ifft2(fft_corr));
         dzdw(:,:,:,o)= fft_corr(1:k1,1:k2,:,:);% requires thorough understanding of fft, and the shifts 

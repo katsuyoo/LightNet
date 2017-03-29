@@ -1,4 +1,4 @@
-function [ y, dzdw,dzdb,opts ] = linear_layer( I,weight,bias,dzdy,opts)
+function [ y, dzdw,dzdb,opts] = linear_layer( I,weight,bias,dzdy,opts)
 %FAST_MLP_LAYER Summary of this function goes here
 %   Detailed explanation goes here
 %I: input_dim x batch_size
@@ -53,11 +53,7 @@ if isempty(dzdy)
     y=weight*I;
     
     if ~isempty(bias)
-        if numel(bias)==numel(y)
-            y=y+bias;% much faster
-        else
-            y=bsxfun(@plus,y,bias);
-        end
+        y=y+bias;        
     end
     
 else    
@@ -69,7 +65,7 @@ else
     end    
     dzdy=permute(dzdy,[1,3,2]);
     I=permute(I,[3,1,2]);
-    dzdw=bsxfun(@times,dzdy,I);
+    dzdw=dzdy.*I;
     dzdw=mean(dzdw,3);
     
 end

@@ -12,7 +12,7 @@ if numel(labels) == size(predictions, 2)
   labels = reshape(labels,1,[]) ;
 end
 
-error = ~bsxfun(@eq, predictions, labels) ;
+error = ~(predictions==labels) ;
 error=gather(error);
 err(1,1) = sum(error(1,:)) ;
 if size(error,1)>=5

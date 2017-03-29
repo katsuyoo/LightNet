@@ -9,7 +9,7 @@ LightNet is a lightweight, versatile and purely Matlab-based deep learning frame
 ## How to use LightNet
 
 Read the tutorial slides in the Documentations folder.  
-Install the latest Matlab on a computer, and run the RunAll.m Matlab script.  
+Install the latest Matlab (R2016b or later) on a computer, and run the RunAll.m Matlab script.  
 Have fun!  
 
 ## Recent updates

@@ -57,7 +57,7 @@ function [ net,y,dzdw,dzdb,opts ] = bnorm( net,x,layer_idx,dzdy,opts )
     end
     
     mu=net.layers{1,layer_idx}.weights{3}./mom_factor;
-    x=bsxfun(@minus,x,mu);
+    x=x-mu;
     
     if(opts.training&&isempty(dzdy))
         net.layers{1,layer_idx}.weights{4}=opts.parameters.mom_bn*net.layers{1,layer_idx}.weights{4}+(1-opts.parameters.mom_bn)*mean(x.^2,2);  
@@ -66,8 +66,9 @@ function [ net,y,dzdw,dzdb,opts ] = bnorm( net,x,layer_idx,dzdy,opts )
     sigma=(net.layers{1,layer_idx}.weights{4}./mom_factor+opts.parameters.eps_bn).^0.5;
     
     if(isempty(dzdy))
-        y=bsxfun(@times,x,net.layers{1,layer_idx}.weights{1}./sigma);
-        y=bsxfun(@plus,y,net.layers{1,layer_idx}.weights{2});        
+        y=x.*(net.layers{1,layer_idx}.weights{1}./sigma);
+        y=y+net.layers{1,layer_idx}.weights{2};        
+    
     else        
         if batch_dim==4
             dzdy=permute(dzdy,[3,1,2,4]);dzdy=reshape(dzdy,size(dzdy,1),[]);
@@ -76,20 +77,22 @@ function [ net,y,dzdw,dzdb,opts ] = bnorm( net,x,layer_idx,dzdy,opts )
             dzdy=permute(dzdy,[2,1,3]);dzdy=reshape(dzdy,size(dzdy,1),[]);
         end
         
-        x=bsxfun(@rdivide,x,sigma);            
+        x=x./sigma;            
+        
         dzdw=sum(dzdy.*x,2)./shape_x(end);
         dzdb=sum(dzdy,2)./shape_x(end);
         denom=size(x,2)./shape_x(end);
         if ~opts.parameters.simple_bn
             %the complicated version
-            x=bsxfun(@times,x,dzdw./denom);
-            x=bsxfun(@plus,x,dzdb./denom);
+            x=x.*(dzdw./denom);
+            x=x+dzdb./denom;
+            
             dzdy=(dzdy-x.*(1-opts.parameters.mom_bn));
             %[max(abs(dzdy(:))), max(abs(tmp(:)))]
         end
         
         %the simple version:
-        y=bsxfun(@times,dzdy,net.layers{1,layer_idx}.weights{1}./sigma);
+        y=dzdy.*(net.layers{1,layer_idx}.weights{1}./sigma);
     end
     
     if batch_dim==4
