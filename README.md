@@ -9,12 +9,14 @@ LightNet is a lightweight, versatile and purely Matlab-based deep learning frame
 ## How to use LightNet
 
 Read the tutorial slides in the Documentations folder.  
-Install the latest Matlab (R2016b or later) on a computer, and run the RunAll.m Matlab script.  
+Install the latest Matlab (**R2016b or later**) on a computer, and run the RunAll.m Matlab script.  
 Have fun!  
 
 ## Recent updates
 
-- ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) CUDNN is supported by installing Neural Network Toolbox from Mathworks. The convolutional network training is over 10x faster than the previous release! The current version can process 10,000 CIFAR-10 images per second in the training.
+Implicit expansion is adopted to replace the bsxfun in LightNet. As a result, *Matlab R2016b* or later is required.
+
+CUDNN is supported by installing Neural Network Toolbox from Mathworks. The convolutional network training is over 10x faster than the previous release! The current version can process 10,000 CIFAR-10 images per second in the training.
 
 LightNet supports using pretrained ImageNet network models. 
 ![coco](coco.png)
@@ -28,7 +30,7 @@ An example recognition using imagenet-vgg-f pretrained net:
 
 ## Major functions in LightNet
   
-####network related:
+####network related:  
 Main_Template: a template script used to train CNN and MLP networks.  
 net_bp: implementation of the back propagation process which is used in CNN and MLP networks.  
 net_ff: implementation of the feed forward process which is used in CNN and MLP networks.  
@@ -37,7 +39,7 @@ train_net: running the network in the training mode to evaluate and calculate th
 TrainingScript: a training template for CNN and MLP networks.  
 net_init*: how to initialize a neural network.  
   
-####layers:
+####layers:  
 bnorm: implementation of the batch normalization layer.  
 conv_layer_2d: implementation of the convolution layer. (CUDNN enabled)  
 dropout: implementation of the dropout layer.  
@@ -49,7 +51,7 @@ sigmoid_ln: implementation of the sigmoid layer.
 softmax: implementation of the softmax layer.  
 tanh_ln: implementation of the tanh layer.  
   
-####loss functions:
+####loss functions:  
 softmaxlogloss: implementation of the softmax log loss layer .  
   
 ####optimization related:
@@ -59,14 +61,14 @@ rmsprop: implementation of the RMSProp algorithm.
 select_learning_rate: implementation of the Selective-SGD algorithm that automatically selects the optimal learning rate at the beginning or in the middle of the training.  
 sgd: implementation of the stochastic gradient descent algorithm with momentum.  
   
-####utility functions:
+####utility functions:  
 generate_output_filename: generate output filename based on the current parameter settings.  
 im2col_ln: customized im2col function used in the pooling layer.  
 pad_data: a padding layer which is used in CNN.  
 SwitchProcessor: a switch function between CPU and GPU.  
 
 
-## How to accelerate LightNet
+## How to accelerate LightNet  
 
 Nvidia CUDNN can be used to calculate convolutions. 
 
