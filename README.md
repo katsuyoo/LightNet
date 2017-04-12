@@ -1,4 +1,4 @@
-﻿# LightNet: A Versatile, Standalone Matlab-based Environment for Deep Learning
+# LightNet: A Versatile, Standalone Matlab-based Environment for Deep Learning
 
 Chengxi Ye, Chen Zhao, Yezhou Yang, Cornelia Fermüller, and Yiannis Aloimonos. 2016. LightNet: A Versatile, Standalone Matlab-based Environment for Deep Learning. In Proceedings of the 2016 ACM on Multimedia Conference (MM '16). Amsterdam, The Netherlands, 1156-1159. (http://dl.acm.org/citation.cfm?id=2973791)
 
@@ -54,7 +54,7 @@ tanh_ln: implementation of the tanh layer.
 ####loss functions:  
 softmaxlogloss: implementation of the softmax log loss layer .  
   
-####optimization related:
+####optimization related:  
 adagrad: implementation of the Adagrad algorithm.  
 adam: implementation of the Adam algorithm.  
 rmsprop: implementation of the RMSProp algorithm.  

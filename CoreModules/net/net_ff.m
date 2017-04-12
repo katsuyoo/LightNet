@@ -35,7 +35,21 @@ function [ net,res,opts ] = net_ff( net,res,opts )
                 end
                 
                 [res(layer+1).x,~,~,opts] = conv_layer_2d( res(layer).x,net.layers{1,layer}.weights{1},net.layers{1,layer}.weights{2},net.layers{1,layer}.stride,net.layers{1,layer}.pad,[],opts );
+   
+            case 'conv1d'
+                if isfield(net.layers{1,layer},'pad')
+                    if(length(net.layers{1,layer}.pad)==1)
+                        net.layers{1,layer}.pad=ones(1,2)*net.layers{1,layer}.pad;
+                    end
+                else
+                   net.layers{1,layer}.pad=[];
+                end
                 
+                if ~isfield(net.layers{1,layer},'stride')
+                   net.layers{1,layer}.stride=1;
+                end
+                [res(layer+1).x,~,~,opts] = conv_layer_1d( res(layer).x,net.layers{1,layer}.weights{1},net.layers{1,layer}.weights{2},net.layers{1,layer}.stride,net.layers{1,layer}.pad,[],opts );
+       
             case {'mlp','linear'} 
                 [res(layer+1).x,~,~,opts] = linear_layer( res(layer).x,net.layers{1,layer}.weights{1},net.layers{1,layer}.weights{2},[], opts);
 
@@ -91,6 +105,8 @@ function [ net,res,opts ] = net_ff( net,res,opts )
                 res(layer+1).x = softmaxlogloss(res(layer).x, res(1).class) ;               
             case 'softmax'        
                 res(layer+1).x = softmax(res(layer).x,[]) ;
+            otherwise 
+                error('net_ff error')
            
         end
     end
