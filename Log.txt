@@ -46,4 +46,5 @@
 20170328
 1. Thanks to the help from Mathworks (J.H. Wang) we have used the implicit expansion feature (introduced in Matlab R2016b) to replace bsxfun in LightNet. 
 20170411
-1. 1d convolution layer added. 
+1. 1d convolution layer added.
+ 

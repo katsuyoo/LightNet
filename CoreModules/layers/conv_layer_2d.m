@@ -136,12 +136,12 @@ else
     fk=permute(opts.layer{opts.current_layer}.fk,[1,2,4,3]);
     
     for i=1:in        
-        fft_corr=fdzdy.*conj(fk(:,:,:,i));
+        fft_corr=conj(fk(:,:,:,i)).*fdzdy;
         y(:,:,i,:)=sum(fft_corr,3);
     end
     y=real(ifft2(y));
     
-    %next line is a dirty circular shift, according to matlab fft implementation.
+    %next line is a 'dirty' circular shift.
     y=circshift(y,[(k1-1),(k2-1)]); 
                
     if(~isempty(pad))
@@ -149,14 +149,11 @@ else
     end
     
     
-    
     %%%dzdw
     dzdw=zeros(k1,k2,in,out,'like',I);
-   
     
     for o=1:out
-        
-        fft_corr=opts.layer{opts.current_layer}.fI.*conj(fdzdy(:,:,o,:));
+        fft_corr=conj(fdzdy(:,:,o,:)).*opts.layer{opts.current_layer}.fI;
         fft_corr=mean(fft_corr,4); %minibatch averaging
         fft_corr=real(ifft2(fft_corr));
         dzdw(:,:,:,o)= fft_corr(1:k1,1:k2,:,:);% requires thorough understanding of fft, and the shifts 

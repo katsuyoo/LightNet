@@ -17,7 +17,7 @@ function [ net,y,dzdw,dzdb,opts ] = bnorm( net,x,layer_idx,dzdy,opts )
     end
     
     if ~isfield(opts.parameters, 'mom_bn')
-        opts.parameters.mom_bn=0.999;
+        opts.parameters.mom_bn=0.1;% this one needs to be small
     end
         
     if ~isfield(opts.parameters, 'simple_bn')

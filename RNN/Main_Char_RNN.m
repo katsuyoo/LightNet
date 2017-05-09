@@ -160,7 +160,6 @@ for ep=start_ep:opts.n_epoch
     save([fullfile(opts.output_dir2,[opts.output_name2,num2str(ep),'.mat'])],'net','parameters','results');     
 end
 
-copyfile(fullfile(opts.output_dir2,[opts.output_name2,num2str(ep),'.mat']),fullfile(opts.output_dir,opts.output_name));
 
 
 
