@@ -14,7 +14,9 @@ Have fun!
 
 ## Recent updates
 
-20170801: Second-order SGD is introduced (SGD2), together with the corresponding normalization technique RMSnorm and a new ModU activation function. SGD2 is a fast training method that shows better tolerance to bad initializations. Check it out in \CNN and \SGD2. 
+20170801: Second-order SGD is introduced (SGD2), together with the corresponding normalization technique RMSnorm and a new ModU activation function. 
+SGD2 is a fast second-order training method (or known as the Newton's method) that trains faster and better, and shows better tolerance to bad initializations. 
+Check it out in \CNN and \SGD2. 
 
 Implicit expansion is adopted to replace the bsxfun in LightNet. As a result, *Matlab R2016b* or later is required.
 
@@ -43,15 +45,23 @@ net_init*: how to initialize a neural network.
   
 ####layers:  
 bnorm: implementation of the batch normalization layer.  
-conv_layer_2d: implementation of the convolution layer. (CUDNN enabled)  
+conv_layer_1d: implementation of the 1d convolution layer. (CUDNN enabled)  
+conv_layer_2d: implementation of the 2d convolution layer. (CUDNN enabled)  
 dropout: implementation of the dropout layer.  
 linear_layer: implementation of (fully-connected) linear layer. (CUDNN enabled)   
 lrn: implementation of the local response normalization layer. (CUDNN enabled)  
-maxpool: implementation of the max-pooling layer. (CUDNN enabled)  
-relu: implementation of the rectified linear unit function.  
-sigmoid_ln: implementation of the sigmoid layer.  
+maxpool: implementation of the 2d max-pooling layer. (CUDNN enabled)  
+maxpool_1d: implementation of the 1d max-pooling layer. (CUDNN enabled)  
+rmsnorm: implementation of the RMS normalization function.  
 softmax: implementation of the softmax layer.  
+
+####activation functions:  
+leaky_relu: implementation of the leaky ReLU layer.
+modu: implementation of the modulus unit layer.  
+relu: implementation of the rectified linear unit layer.  
+sigmoid_ln: implementation of the sigmoid layer.  
 tanh_ln: implementation of the tanh layer.  
+
   
 ####loss functions:  
 softmaxlogloss: implementation of the softmax log loss layer .  
@@ -62,11 +72,13 @@ adam: implementation of the Adam algorithm.
 rmsprop: implementation of the RMSProp algorithm.  
 select_learning_rate: implementation of the Selective-SGD algorithm that automatically selects the optimal learning rate at the beginning or in the middle of the training.  
 sgd: implementation of the stochastic gradient descent algorithm with momentum.  
+sgd2: implementation of the second-order stochastic gradient descent algorithm with momentum.
   
 ####utility functions:  
 generate_output_filename: generate output filename based on the current parameter settings.  
 im2col_ln: customized im2col function used in the pooling layer.  
-pad_data: a padding layer which is used in CNN.  
+sig2col_ln: unroll overlapping signal windows into a matrix, used in the 1d pooling layer.  
+pad_data*: a padding layer which is used in CNN.  
 SwitchProcessor: a switch function between CPU and GPU.  
 
 
