@@ -15,7 +15,7 @@ use_selective_sgd=1;
 %select a new learning rate every n epochs
 ssgd_search_freq=20;
 
-learning_method=@sgd;%training method: @sgd,@adagrad,@rmsprop,@adam
+learning_method=@sgd2;%training method: @sgd,@adagrad,@rmsprop,@adam,@sgd2
 
 sgd_lr=1e-3;
 

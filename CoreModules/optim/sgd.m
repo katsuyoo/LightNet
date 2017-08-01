@@ -14,13 +14,7 @@ function [  net,res,opts ] = sgd(  net,res,opts )
         net.iterations=0;
     end
 
-    
-    if ~isfield(opts,'results')||~isfield(opts.results,'lrs')
-        opts.results.lrs=[];%%not really necessary
-    end
-    opts.results.lrs=[opts.results.lrs;gather(opts.parameters.lr)];
-    
-    net.iterations=net.iterations+1;
+   net.iterations=net.iterations+1;
     
     mom_factor=(1-opts.parameters.mom.^net.iterations);
     

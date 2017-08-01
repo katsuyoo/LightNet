@@ -15,6 +15,7 @@ if isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1 %
     end
     
     kernel_sz=size(kernel);
+    if length(kernel_sz)==2,kernel_sz(3)=1;end
     if isempty(pad),pad=[0,0,0,0];end
     PADDING_MODE=0;
     [f,in,b]=size(I); 

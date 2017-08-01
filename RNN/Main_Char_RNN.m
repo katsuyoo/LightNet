@@ -157,7 +157,7 @@ for ep=start_ep:opts.n_epoch
     %}
     parameters=opts.parameters;    
     results=opts.results;
-    save([fullfile(opts.output_dir2,[opts.output_name2,num2str(ep),'.mat'])],'net','parameters','results');     
+    save([fullfile(opts.output_dir,[opts.output_name,num2str(ep),'.mat'])],'net','parameters','results');     
 end
 
 

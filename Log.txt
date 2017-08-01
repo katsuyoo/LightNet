@@ -47,4 +47,9 @@
 1. Thanks to the help from Mathworks (J.H. Wang) we have used the implicit expansion feature (introduced in Matlab R2016b) to replace bsxfun in LightNet. 
 20170411
 1. 1d convolution layer added.
- 
+ 20170801
+1. SGD2, a second-order training method is introduced.
+2. RMSnorm, the normalization technique for second-order training, is introduced.
+3. ModU activation function is added.
+4. CNN is now trained with SGD2.
+5. A new experiment is added to show SGD2's tolerance to bad initialization.

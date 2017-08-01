@@ -15,10 +15,6 @@ function [  net,res,opts ] = adam(  net,res,opts )
         net.iterations=0;
     end
     
-    if ~isfield(opts,'results')||~isfield(opts.results,'lrs')
-        opts.results.lrs=[];%%not really necessary
-    end
-    opts.results.lrs=[opts.results.lrs;gather(opts.parameters.lr)];
     
     if ~isfield(opts.parameters,'eps')
         opts.parameters.eps=1e-8;

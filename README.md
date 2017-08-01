@@ -14,6 +14,8 @@ Have fun!
 
 ## Recent updates
 
+20170801: Second-order SGD is introduced (SGD2), together with the corresponding normalization technique RMSnorm and a new ModU activation function. SGD2 is a fast training method that shows better tolerance to bad initializations. Check it out in \CNN and \SGD2. 
+
 Implicit expansion is adopted to replace the bsxfun in LightNet. As a result, *Matlab R2016b* or later is required.
 
 CUDNN is supported by installing Neural Network Toolbox from Mathworks. The convolutional network training is over 10x faster than the previous release! The current version can process 10,000 CIFAR-10 images per second in the training.
