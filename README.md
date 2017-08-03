@@ -16,7 +16,7 @@ Have fun!
 
 20170801: Second-order SGD is introduced (SGD2), together with the corresponding normalization technique RMSnorm and a new ModU activation function. 
 SGD2 is a fast second-order training method (or known as the Newton's method) that trains faster and better, and shows better tolerance to bad initializations. 
-Check it out in \CNN and \SGD2. 
+Check it out in \SGD2. 
 
 Implicit expansion is adopted to replace the bsxfun in LightNet. As a result, *Matlab R2016b* or later is required.
 

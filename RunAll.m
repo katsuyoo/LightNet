@@ -28,13 +28,24 @@ cd ..
 
 clear all;
 cd('./CNN');
-disp('Second-order SGD test 1.')
-disp('Testing training a new convolutional neural network.')
+disp('Testing training a new convolutional neural network using SGD.')
 disp('An Nvidia GPU is required by default.')
 disp('If you do not have it please set use_gpu=0')
 disp('Neural Network Toolbox is required by default.')
 disp('If you do not have it please set opts.use_nntoolbox=0')
 Main_CIFAR_CNN_SGD();
+cd ..
+
+
+clear all;
+disp('Second-order SGD test 1.')
+cd('./SGD2');
+disp('Testing training a new convolutional neural network using SGD2.')
+disp('An Nvidia GPU is required by default.')
+disp('If you do not have it please set use_gpu=0')
+disp('Neural Network Toolbox is required by default.')
+disp('If you do not have it please set opts.use_nntoolbox=0')
+Main_CIFAR_CNN_SGD2();
 cd ..
 
 

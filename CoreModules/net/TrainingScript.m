@@ -74,7 +74,7 @@ for ep=start_ep:opts.n_epoch
             title('Loss per Epoch');legend('show')
             drawnow;
         end
-        saveas(gcf,[fullfile(opts.output_dir,[opts.output_name,num2str(ep),'.pdf'])])
+        
     end
     
     parameters=opts.parameters;
@@ -102,7 +102,7 @@ if strcmp(net.layers{end}.type,'softmaxloss')
     copyfile(best_net_source,best_net_destination);
 end
 
-
+saveas(gcf,[fullfile(opts.output_dir,[opts.output_name,num2str(opts.n_epoch),'.pdf'])])
 
 
 
