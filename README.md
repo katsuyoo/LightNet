@@ -18,6 +18,9 @@ Have fun!
 SGD2 is a fast second-order training method (or known as the Newton's method) that trains faster and better, and shows better tolerance to bad initializations. 
 Check it out in \SGD2. 
 
+SGD2 inherits the good convergence properties of the second-order methods and has good tolerance to wild initializations. 20-epoch training of a 10-layer-deep network produces comparable accuracy.
+![Init](Init.png)
+
 Implicit expansion is adopted to replace the bsxfun in LightNet. As a result, *Matlab R2016b* or later is required.
 
 CUDNN is supported by installing Neural Network Toolbox from Mathworks. The convolutional network training is over 10x faster than the previous release! The current version can process 10,000 CIFAR-10 images per second in the training.
