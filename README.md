@@ -18,7 +18,7 @@ Have fun!
 SGD2 is a fast second-order training method (or known as the Newton's method) that trains faster and better, and shows better tolerance to bad initializations. 
 Check it out in \SGD2. 
 
-SGD2 inherits the good convergence properties of the second-order methods and has good tolerance to wild initializations. 20-epoch training of a 10-layer-deep network produces comparable accuracy.
+20-epoch training of a 10-layer-deep network. The network is initialized using Gaussian distribution with std from 10^(-4) to 10^4.
 ![Init](Init.png)
 
 Implicit expansion is adopted to replace the bsxfun in LightNet. As a result, *Matlab R2016b* or later is required.
