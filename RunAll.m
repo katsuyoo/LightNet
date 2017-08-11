@@ -13,6 +13,17 @@ Main_Cart_Pole_Q_Network
 cd ..
 
 
+
+clear all;
+
+cd('./ReinforcementLearning');
+disp('Testing training a policy network.')
+Main_Cart_Pole_Policy_Network
+cd ..
+
+
+
+
 clear all;
 cd('./RNN');
 disp('Testing training an LSTM.')

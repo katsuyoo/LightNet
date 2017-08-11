@@ -4,6 +4,8 @@
 
 %
 clear all;
+SEED=1;
+rng(SEED);
 SHOW_ANIMATION=1;%%if you want to visualize, set this to 1.
 
 %%%%initialize the network
@@ -11,15 +13,13 @@ net=net_init_pole();
 
 addpath(genpath('../CoreModules'));
 
-SHOW_ANIMATION_Every_N=100; %every n trials
-GAMMA   = 0.99;       % Discount factor for critic. 
-EPSILON = 0.01;
+SHOW_ANIMATION_EVERY_N=100; %every n trials
+GAMMA   = 0.9;       % Discount factor for critic. 
 ACTIONS = 2;
 
 MAX_FAILURES  =  5000;      % Termination criterion. 
-MAX_STEPS = 100000;
+MAX_STEPS   =     100000;
 
-TrainLoss=[];
 MaxSteps=[];
 failures=0;
 success=0;
@@ -50,93 +50,85 @@ while (failures < MAX_FAILURES)
 
     state=[x;x_dot;theta;theta_dot];
     valid=is_valid_state(x,x_dot,theta,theta_dot);
-    
-    InputBatch=zeros(4,MAX_STEPS);
-    opts.dzdy =zeros(ACTIONS,MAX_STEPS);
-    BatchLoss=zeros(1,MAX_STEPS);
+   
+    Inputs=zeros(4,MAX_STEPS);
+    opts.dzdy =zeros(ACTIONS,MAX_STEPS);    
+    acts=zeros(1,MAX_STEPS);
     
     res(1).x=state;
     [ net,res,opts] = net_ff(net,res,opts);
-    Q_new=res(end).x;
-    [V_new,a_new]=max(Q_new);
+    P=softmax(res(end).x,[]);
+    %Choose action randomly according to the current policy. 
+    act=1+(rand(1)>P(1));
     samples=1;
-    InputBatch(:,samples)=state;
+    P(act)=P(act)-1;%der of softmaxlogloss
+    opts.dzdy(:,samples)=P;
+    Inputs(:,samples)=state;
+    acts(samples)=act;
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%  RESET  END %%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%
-    failed=0;
     
-    while samples < MAX_STEPS && failed==0 
+    failed=0;
+    while samples < MAX_STEPS && failed==0
 
-        if SHOW_ANIMATION&&(mod(failures,SHOW_ANIMATION_Every_N)==0||success)
+        if SHOW_ANIMATION&&(mod(failures,SHOW_ANIMATION_EVERY_N)==0||success)
             plot_Cart_Pole(x,theta)
             if success && samples>1000
                 break;
             end
         end
-        
-        %% make a selection and report the score Q(s,a) 
-        Q_old=Q_new;
-        
-        if rand(1)<EPSILON    
-            %Choose action randomly. 
-            a_old=randi(ACTIONS);
-        else
-            %select the highest scored action
-            a_old=a_new;
-        end
-
+       
         %Apply action to the simulated cart-pole
-        [x,x_dot,theta,theta_dot]=Cart_Pole(a_old-1,x,x_dot,theta,theta_dot);           
+        [x,x_dot,theta,theta_dot]=Cart_Pole(act-1,x,x_dot,theta,theta_dot);    
+       
         state=[x;x_dot;theta;theta_dot];
         valid=is_valid_state(x,x_dot,theta,theta_dot);
-
+        
         if valid<0	
             %Failure occurred
             failed = 1;
             failures=failures+1;
             MaxSteps=[MaxSteps;samples];
             disp(['Trial was ' int2str(failures) ' steps '  num2str(samples)]);
-            %Reinforcement upon failure is -1. Prediction of failure is 0.
-            r = -1.0;
-            V_new = 0.;
+            %Reinforcement upon failure is -1. 
+            discounted_r=-exp(log(GAMMA).*[samples:-1:1]);            
+            
             
         else
-            %Not a failure.Reinforcement is 0.            
+            %Not a failure.r=0.
             failed = 0;
-            r = 0;        
-            
             res(1).x=state;
             [net,res,opts] = net_ff(net,res,opts);
-            Q_new=res(end).x;
-            [V_new,a_new]=max(Q_new);
+            P=softmax(res(end).x,[]);
+            %Choose action randomly according to the current policy. 
+            
+            act=1+(rand(1)>P(1));
             samples=samples+1;
-            InputBatch(:,samples)=state;
+            acts(samples)=act;
+            %P;
+            %acts(1:samples)
+            P(act)=P(act)-1;%der of softmaxlogloss
+            opts.dzdy(:,samples)=P;
+            Inputs(:,samples)=state;
+    
         end
-
-        %Heuristic reinforcement is:   current reinforcement
-        %     + gamma * new failure prediction - previous failure prediction
         
-        %%derivative with L2 cost:
-        der=Q_old(a_old)-(r + GAMMA * V_new);
-        opts.dzdy(a_old,samples-1)=der;
-        BatchLoss(samples-1)=gather(der.^2)/2;
 
         if failed
             
             %%%%%%%%%%%%%%%%%%%%%
-            opts.dzdy=opts.dzdy(:,1:samples-1);
+            opts.dzdy=discounted_r.*opts.dzdy(:,1:samples);
 
             %%This is redundant, just to recalculate some intermediate values
             %%and put them into the right place.
-            res(1).x=InputBatch(:,samples-1);
+            res(1).x=Inputs(:,1:samples);
             [net,res,opts] = net_ff(net,res,opts);  
 
             %%
             [ net,res,opts ] = net_bp( net,res,opts );    
             [ net,res,opts ] = adam( net,res,opts );
-            TrainLoss=[TrainLoss;mean(BatchLoss(samples-1))];
 
         end
 
@@ -145,7 +137,6 @@ while (failures < MAX_FAILURES)
     if success && samples>1000
         break;
     end
-            
     if samples>=MAX_STEPS
         success=1;
         if SHOW_ANIMATION==0
@@ -155,7 +146,7 @@ while (failures < MAX_FAILURES)
         end
     end
 
-end
+  end
   
 if (failures == MAX_FAILURES)
     disp(['Pole not balanced. Stopping after ' int2str(failures) ' failures ' ]);
@@ -163,5 +154,4 @@ else
     disp(['Pole balanced successfully for at least ' int2str(MAX_STEPS) ' steps ' ]);
 end
 close all;
-figure;subplot(1,2,1);plot(TrainLoss);title('Training Loss');
-subplot(1,2,2);plot(MaxSteps);title('Steps');
+figure;plot(MaxSteps);title('Steps');
