@@ -21,6 +21,7 @@ MAX_FAILURES  =  5000;      % Termination criterion.
 MAX_STEPS   =     100000;
 
 MaxSteps=[];
+Vs=[];
 failures=0;
 success=0;
 
@@ -93,9 +94,10 @@ while (failures < MAX_FAILURES)
             MaxSteps=[MaxSteps;samples];
             disp(['Trial was ' int2str(failures) ' steps '  num2str(samples)]);
             %Reinforcement upon failure is -1. 
-            discounted_r=-exp(log(GAMMA).*[samples:-1:1]);            
+            discounted_r=-exp(2*log(GAMMA).*[samples:-1:1]);            
             
-            
+            V=mean(-exp(log(GAMMA).*[samples:-1:1]));%E[V(s)]
+            Vs=[Vs;V];
         else
             %Not a failure.r=0.
             failed = 0;
@@ -154,4 +156,5 @@ else
     disp(['Pole balanced successfully for at least ' int2str(MAX_STEPS) ' steps ' ]);
 end
 close all;
-figure;plot(MaxSteps);title('Steps');
+figure;subplot(1,2,1);plot(Vs);title('Values');
+subplot(1,2,2);plot(MaxSteps);title('Steps');

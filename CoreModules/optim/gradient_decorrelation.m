@@ -1,11 +1,8 @@
-function [  net,res,opts ] = sgd2(  net,res,opts )
-% Stochastic gradient descent using second-order information.
+function [  net,res,opts ] = gradient_decorrelation(  net,res,opts )
+% Decorrelating gradient descents using second-order information.
 %   Ye, C., Yang, Y., Fermuller, C., & Aloimonos, Y. (2017). 
 %   On the Importance of Consistency in Training Deep Neural Networks. arXiv preprint arXiv:1708.00631.
 
-    if ~isfield(opts.parameters,'weightDecay')
-        opts.parameters.weightDecay=1e-4;
-    end    
     if ~isfield(opts.parameters,'lambda_sgd2')
         opts.parameters.lambda_sgd2=1e0;
     end
@@ -15,29 +12,16 @@ function [  net,res,opts ] = sgd2(  net,res,opts )
     if ~isfield(opts.parameters,'max_inv_size')
         opts.parameters.max_inv_size=500;
     end    
-    if ~isfield(opts.parameters,'clip')
-        opts.parameters.clip=0;
-    end
     if ~isfield(opts.parameters,'decorr_bias')
         opts.parameters.decorr_bias=1;
     end
-    if ~isfield(net,'iterations')||(isfield(opts,'reset_mom')&&opts.reset_mom==1)
-        net.iterations=0;
-    end
-   
-    net.iterations=net.iterations+1;
     
-    mom_factor=(1-opts.parameters.mom.^net.iterations);
     max_inv_size=opts.parameters.max_inv_size;
     lambda=opts.parameters.lambda_sgd2;
     
     
     for layer=1:numel(net.layers)
-        if isfield(net.layers{layer},'weights')&&~isempty(net.layers{layer}.weights)
-            if ~isfield(net.layers{layer},'momentum')||(isfield(opts,'reset_mom')&&opts.reset_mom==1)
-                net.layers{layer}.momentum{1}=zeros(size(net.layers{layer}.weights{1}),'like',net.layers{layer}.weights{1});
-                net.layers{layer}.momentum{2}=zeros(size(net.layers{layer}.weights{2}),'like',net.layers{layer}.weights{2});
-            end
+        if isfield(net.layers{layer},'weights')&&~isempty(net.layers{layer}.weights)            
             
             dzdw=res(layer).dzdw;
             dzdb=res(layer).dzdb;
@@ -82,28 +66,12 @@ function [  net,res,opts ] = sgd2(  net,res,opts )
                     %dzdb is decorrelated with dzdw, take average to smooth the results.                    
                     dzdb=reshape(mean(reshape(dzdb(:),K,[]),1),size(res(layer).dzdb));
                 end
+               res(layer).dzdw=dzdw;
+               res(layer).dzdb=dzdb;
             end
             
-            if opts.parameters.clip>0
-                mask=abs(res(layer).dzdw)>opts.parameters.clip;
-                res(layer).dzdw(mask)=sign(res(layer).dzdw(mask)).*opts.parameters.clip;%%this type of processing seems to be very helpful
-                mask=abs(res(layer).dzdb)>opts.parameters.clip;
-                res(layer).dzdb(mask)=sign(res(layer).dzdb(mask)).*opts.parameters.clip;
-            end
-
-            
-            %sgd updates
-            net.layers{layer}.momentum{1}=opts.parameters.mom.*net.layers{layer}.momentum{1}-(1-opts.parameters.mom).*dzdw - opts.parameters.weightDecay * net.layers{layer}.weights{1};
-            net.layers{layer}.weights{1}=net.layers{layer}.weights{1}+opts.parameters.lr*net.layers{layer}.momentum{1}./mom_factor;
-            
-            net.layers{layer}.momentum{2}=opts.parameters.mom.*net.layers{layer}.momentum{2}-(1-opts.parameters.mom).*dzdb;
-            net.layers{layer}.weights{2}=net.layers{layer}.weights{2}+opts.parameters.lr*net.layers{layer}.momentum{2}./mom_factor;
-
         end
     end
    
-    if ~isfield(opts,'reset_mom')||opts.reset_mom==1
-        opts.reset_mom=0;
-    end
 end
 

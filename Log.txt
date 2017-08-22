@@ -55,3 +55,6 @@
 5. A new experiment is added to show SGD2's tolerance to bad initialization.
  20170811
 1. An example on policy network/policy gradient is added.
+ 20170822
+1. Adam,RMSProp,Adagrad have been modified to support second-order training, examples are scheduled later.
+
