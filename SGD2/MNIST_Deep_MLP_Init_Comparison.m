@@ -24,7 +24,7 @@ disp('SGD2 initialization tolerance tests.')
 
 
 %%%%%%%%%%%%%%%%%%%%%
-disp('Initialization with N(0,10000)')
+disp('Initialization with N(0,10000^{2})')
 
 learning_method=@sgd2; %training method: @sgd,@rmsprop,@adagrad,@adam
 opts.hidden_nodes=128;
@@ -57,7 +57,7 @@ clear opts;
 %%%%%%%%%%%%%%%%%%%%%%
 
 
-disp('Initialization with N(0,1000)')
+disp('Initialization with N(0,1000^{2})')
 learning_method=@sgd2; %training method: @sgd,@rmsprop,@adagrad,@adam
 opts.hidden_nodes=128;
 opts.layers=10;
@@ -92,7 +92,7 @@ clear opts;
 
 %%%%%%%%%%%%%%%%%%%%%
 
-disp('Initialization with N(0,100)')
+disp('Initialization with N(0,100^{2})')
 learning_method=@sgd2; %training method: @sgd,@rmsprop,@adagrad,@adam
 opts.hidden_nodes=128;
 opts.layers=10;
@@ -159,7 +159,7 @@ clear opts;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-disp('Initialization with N(0,1)')
+disp('Initialization with N(0,1^{2})')
 learning_method=@sgd2; %training method: @sgd,@rmsprop,@adagrad,@adam
 opts.hidden_nodes=128;
 opts.layers=10;
@@ -192,7 +192,7 @@ clear opts;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-disp('Initialization with N(0,0.1)')
+disp('Initialization with N(0,0.1^{2})')
 learning_method=@sgd2; %training method: @sgd,@rmsprop,@adagrad,@adam
 opts.hidden_nodes=128;
 opts.layers=10;
@@ -224,7 +224,7 @@ clear opts;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-disp('Initialization with N(0,0.01)')
+disp('Initialization with N(0,0.01^{2})')
 learning_method=@sgd2; %training method: @sgd,@rmsprop,@adagrad,@adam
 opts.hidden_nodes=128;
 opts.layers=10;
@@ -259,7 +259,7 @@ clear opts;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-disp('Initialization with N(0,0.001)')
+disp('Initialization with N(0,0.001^{2})')
 learning_method=@sgd2; %training method: @sgd,@rmsprop,@adagrad,@adam
 opts.hidden_nodes=128;
 opts.layers=10;
@@ -293,7 +293,7 @@ clear opts;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-disp('Initialization with N(0,0.0001)')
+disp('Initialization with N(0,0.0001^{2})')
 
 learning_method=@sgd2; %training method: @sgd,@rmsprop,@adagrad,@adam
 opts.hidden_nodes=128;
@@ -342,15 +342,15 @@ end
 plot1 =plot(data);
 %ylim(axes1,[0 3]);
 
-set(plot1(1),'DisplayName','N(0,10000)','LineWidth',1);
-set(plot1(2),'DisplayName','N(0,1000)','LineWidth',1);
-set(plot1(3),'DisplayName','N(0,100)','LineWidth',1);
-set(plot1(4),'DisplayName','N(0,10)','LineWidth',1);
-set(plot1(5),'DisplayName','N(0,1)','LineWidth',1);
-set(plot1(6),'DisplayName','N(0,0.1)','LineWidth',1);
-set(plot1(7),'DisplayName','N(0,0.0.01)','LineWidth',1);
-set(plot1(8),'DisplayName','N(0,0.0001)','LineWidth',1);
-set(plot1(9),'DisplayName','N(0,0.00001)','LineWidth',1);
+set(plot1(1),'DisplayName','N(0,10000^{2})','LineWidth',1);
+set(plot1(2),'DisplayName','N(0,1000^{2})','LineWidth',1);
+set(plot1(3),'DisplayName','N(0,100^{2})','LineWidth',1);
+set(plot1(4),'DisplayName','N(0,10^{2})','LineWidth',1);
+set(plot1(5),'DisplayName','N(0,1^{2})','LineWidth',1);
+set(plot1(6),'DisplayName','N(0,0.1^{2})','LineWidth',1);
+set(plot1(7),'DisplayName','N(0,0.0.01^{2})','LineWidth',1);
+set(plot1(8),'DisplayName','N(0,0.0001^{2})','LineWidth',1);
+set(plot1(9),'DisplayName','N(0,0.00001^{2})','LineWidth',1);
 
 % Uncomment the following line to preserve the Y-limits of the axes
 % ylim(axes1,[0 3]);
@@ -360,9 +360,8 @@ legend(axes1,'show');
 
 
 xlabel('Epoch');
-title('Test Error on the MNIST Dataset');
+title('Test Error under Different Initializations on the MNIST Dataset');
 ylabel('Error Rate');
-
 
 
 
