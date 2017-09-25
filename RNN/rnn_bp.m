@@ -1,5 +1,5 @@
 function [ net,res,opts ] = rnn_bp( net,res,opts )
-%SLTM_BP Summary of this function goes here
+%RNN_BP Summary of this function goes here
 %   Detailed explanation goes here
 
     n_frames=opts.parameters.n_frames;    

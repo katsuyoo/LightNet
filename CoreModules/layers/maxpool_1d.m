@@ -5,23 +5,33 @@ if opts.use_nntoolbox==1
     
     I=permute(I,[1,4,2,3]);pad(4)=0;
     PADDING_MODE=0;
-    if pad(1)~=pad(2)||pad(3)~=pad(4)    
-       [i1,i2,in,b]=size(I);  
-       I = pad_data(I,pad,[]);
-       pad2=pad;
-       pad=[0,0,0,0];
-       PADDING_MODE=1;
-    end
     
-    if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'maxpool2d_nntb')
+    if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'maxpool_nntb')
         K=[K,1];S=[S,1];
-        opts.layer{opts.current_layer}.maxpool_nntb = nnet.internal.cnn.layer.MaxPooling2D( 'maxpool2d_nntb', K,S,pad(1:2:end));
+        product_info=ver('nnet');
+        opts.nnet_ver=str2double(product_info.Version);
+        if opts.nnet_ver<11.0
+            if pad(1)~=pad(2)||pad(3)~=pad(4)    
+               [i1,i2,in,b]=size(I);  
+               I = pad_data(I,pad,[]);
+               pad2=pad;
+               pad=[0,0,0,0];
+               PADDING_MODE=1;
+            end
+            opts.layer{opts.current_layer}.maxpool_nntb = nnet.internal.cnn.layer.MaxPooling2D( 'maxpool_nntb', K,S,pad(1:2:end));
+
+        else
+            opts.layer{opts.current_layer}.maxpool_nntb = nnet.internal.cnn.layer.MaxPooling2D( 'maxpool_nntb', K,S,'manual',pad);
+        end
+        
         if opts.use_gpu
             opts.layer{opts.current_layer}.maxpool_nntb = setupForGPUPrediction(opts.layer{opts.current_layer}.maxpool_nntb);
         else
             opts.layer{opts.current_layer}.maxpool_nntb =setupForHostPrediction(opts.layer{opts.current_layer}.maxpool_nntb);
         end
-    end    
+    end
+   
+    
     maxpool_nntb=opts.layer{opts.current_layer}.maxpool_nntb ;
     
     if isempty(dzdy)
@@ -64,7 +74,7 @@ if isempty(dzdy)
     
     Dout = ceil((Din-K+1)/S);
     
-    [slices,idx0]=sig2col_ln(I,K,S);
+    [slices,idx0]=unroll_ln(I,K,S);
     [y,from]=max(slices,[],1);
     from=double(from);%
     y=reshape(y,Dout,N,B);

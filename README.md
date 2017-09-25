@@ -9,6 +9,7 @@ LightNet is a lightweight, versatile and purely Matlab-based deep learning frame
 Read the tutorial slides in the Documentations folder.  
 Install the latest Matlab (**R2016b or later**) on a computer, and run the RunAll.m Matlab script.  
 Have fun!  
+More details can be found in the supplementary materials.  
 
 ## Recent updates
 
@@ -30,6 +31,8 @@ Check it out in \SGD2.
 20-epoch training of a 10-layer-deep network. The network is initialized using Gaussian distribution with std from 10^(-4) to 10^4.
 
 ![Init](Init.png)
+
+20170924: A simple example of training a Quasi-RNN model is added to LightNet. Quasi-RNNs are much easier to parallelize compared to RNNs. 
 
 
 ## Major functions in LightNet
@@ -77,7 +80,7 @@ select_learning_rate: implementation of the Selective-SGD algorithm that automat
 ####utility functions:  
 generate_output_filename: generate output filename based on the current parameter settings.  
 im2col_ln: customized im2col function used in the pooling layer.  
-sig2col_ln: unroll overlapping signal windows into a matrix, used in the 1d pooling layer.  
+unroll_ln: unroll overlapping signal windows into a matrix, used in the 1d pooling layer.  
 pad_data*: a padding layer which is used in CNN.  
 SwitchProcessor: a switch function between CPU and GPU.  
 

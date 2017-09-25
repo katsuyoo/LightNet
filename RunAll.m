@@ -23,10 +23,9 @@ cd ..
 
 
 
-
 clear all;
 cd('./RNN');
-disp('Testing training an LSTM.')
+disp('Testing training a Quasi-RNN.')
 Main_Char_RNN();
 cd ..
 

@@ -1,5 +1,4 @@
 function [net] = net_init_char_lstm(opts)
-% CNN_MNIST_LENET Initialize a CNN similar for MNIST
 
 
 rng('default');
@@ -26,7 +25,7 @@ net{2}.layers{end+1} = struct('type', 'mlp', ...
                            'weights', {{f*randn(n_cell_nodes,n_hidden_nodes+n_input_nodes, 'single'), zeros(n_cell_nodes,1,'single')}}) ;
 net{2}.layers{end+1} = struct('type', 'tanh') ;
 
-%generate the hidden nodes for the next time frame
+%generate the hidden nodes for the current time frame
 net{3}.type='OutputTransform';
 net{3}.layers = {};
 net{3}.layers{end+1} = struct('type', 'tanh') ;

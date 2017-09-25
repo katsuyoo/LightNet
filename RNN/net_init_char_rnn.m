@@ -1,5 +1,4 @@
 function [net] = net_init_char_rnn(opts)
-% CNN_MNIST_LENET Initialize a CNN similar for MNIST
 
 rng('default');
 rng(0) ;
@@ -10,7 +9,7 @@ n_hidden_nodes=opts.parameters.n_hidden_nodes;
 n_input_nodes=opts.parameters.n_input_nodes;
 n_output_nodes=opts.parameters.n_output_nodes;
 
-%generate the adjustments of the hidden nodes for the next time frame
+%generate the adjustments of the hidden nodes for the current time frame
 net{1}.type='InputTransform';
 net{1}.layers = {} ;
 net{1}.layers{end+1} = struct('type', 'mlp', ...

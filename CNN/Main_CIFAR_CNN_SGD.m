@@ -3,8 +3,12 @@ addpath(genpath('../CoreModules'));
 n_epoch=30;
 dataset_name='cifar';
 network_name='cnn';
-use_gpu=1%use gpu or not 
-opts.use_nntoolbox=1 %Requires Neural Network Toolbox to use it.
+use_gpu=(gpuDeviceCount>0)%use gpu or not 
+
+if use_gpu
+    %Requires Neural Network Toolbox to use it.
+    opts.use_nntoolbox=license('test','neural_network_toolbox')
+end
 %function handle to prepare your data
 PrepareDataFunc=@PrepareData_CIFAR_CNN;
 %function handle to initialize the network

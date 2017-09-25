@@ -11,7 +11,13 @@ if exist('opts','var')&&isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1
     batch_size=size(I,2);
     %use nntoolbox
     if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'fc_nntb')
-        opts.layer{opts.current_layer}.fc_nntb=nnet.internal.cnn.layer.Convolution2D('conv2d_nntb', [1,1], in ,out, [1,1], [0,0]);
+        product_info=ver('nnet');
+        opts.nnet_ver=str2double(product_info.Version);
+        if opts.nnet_ver<11
+            opts.layer{opts.current_layer}.fc_nntb=nnet.internal.cnn.layer.Convolution2D('conv2d_nntb', [1,1], in ,out, [1,1], [0,0]);
+        else
+            opts.layer{opts.current_layer}.fc_nntb=nnet.internal.cnn.layer.Convolution2D('conv2d_nntb', [1,1], in ,out, [1,1],'manual', [0,0,0,0]);
+        end
         if opts.use_gpu
             opts.layer{opts.current_layer}.fc_nntb = setupForGPUPrediction(opts.layer{opts.current_layer}.fc_nntb);
         else
@@ -30,12 +36,16 @@ if exist('opts','var')&&isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1
     if isempty(dzdy)  
         y=fc_nntb.forward(I);
         y=permute(y,[3,4,1,2]);
-    else      
+    else
         
         dzdy=permute(dzdy,[3,4,1,2]);
-        y = fc_nntb.backward(  I, [], dzdy, [] );
-
-        gradients = fc_nntb.gradients(I, dzdy);
+        if opts.nnet_ver<11
+            y = fc_nntb.backward(  I, [], dzdy, [] );
+            gradients = fc_nntb.gradients(I, dzdy);
+        else
+            [y,gradients] = fc_nntb.backward( I, [], dzdy, [] );
+        end
+        
         dzdw=gradients{1}./batch_size;
         dzdb=gradients{2}./batch_size;
         y=permute(y,[3,4,1,2]);

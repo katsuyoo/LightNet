@@ -3,7 +3,7 @@ function [ net,res,opts ] = lstm_ff( net,opts )
 %   Detailed explanation goes here
 
     n_frames=opts.parameters.n_frames;
-    n_cell_nodes=opts.parameters.n_cell_nodes;
+    n_cell_nodes=opts.parameters.n_hidden_nodes;
     n_hidden_nodes=opts.parameters.n_hidden_nodes;
     batch_size=opts.parameters.batch_size;
     

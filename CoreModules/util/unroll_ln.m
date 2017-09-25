@@ -1,4 +1,4 @@
-function [ slices,idx0 ] = sig2col_ln( I, K, S )
+function [ slices,idx0 ] = unroll_ln( I, K, S )
 
     [Din,N,B]=size(I);
     Dout = ceil((Din-K+1)/S);

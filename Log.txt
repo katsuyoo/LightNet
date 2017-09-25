@@ -57,4 +57,6 @@
 1. An example on policy network/policy gradient is added.
  20170822
 1. Adam,RMSProp,Adagrad have been modified to support second-order training, examples are scheduled later.
-
+ 20170924
+1. Support for Matlab 2017b
+2. A simple example of training a Quasi-RNN is added to LightNet.

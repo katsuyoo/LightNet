@@ -18,20 +18,28 @@ if isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1 %
     if length(kernel_sz)==2,kernel_sz(3)=1;end
     if isempty(pad),pad=[0,0,0,0];end
     PADDING_MODE=0;
-    [f,in,b]=size(I); 
-    if pad(1)~=pad(2)    
-       I = pad_data_1d(I,pad,[]);
-       pad2=pad;
-       pad=[0,0,0,0];
-       PADDING_MODE=1;
-    else
-        pad(4)=0;
-    end
+    
     
    %nntb interface: nnet.internal.cnn.layer.Convolution2D(name, filterSize, numChannels, numFilters, stride, padding);
+   
     if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'conv1d_nntb')
-        opts.layer{opts.current_layer}.conv1d_nntb=nnet.internal.cnn.layer.Convolution2D('conv1d_nntb', [kernel_sz(1),1], kernel_sz(2) ,kernel_sz(3), [stride(1),1], pad(1:2:end));
-    
+        product_info=ver('nnet');
+        opts.nnet_ver=str2double(product_info.Version);
+        if opts.nnet_ver<11
+            [f,in,b]=size(I); 
+            if pad(1)~=pad(2)    
+               I = pad_data_1d(I,pad,[]);
+               pad2=pad;
+               pad=[0,0,0,0];
+               PADDING_MODE=1;
+            else
+                pad(4)=0;
+            end
+            opts.layer{opts.current_layer}.conv1d_nntb=nnet.internal.cnn.layer.Convolution2D('conv1d_nntb', [kernel_sz(1),1], kernel_sz(2) ,kernel_sz(3), [stride(1),1], pad(1:2:end));
+        else
+            opts.layer{opts.current_layer}.conv1d_nntb=nnet.internal.cnn.layer.Convolution2D('conv1d_nntb', [kernel_sz(1),1], kernel_sz(2) ,kernel_sz(3), [stride(1),1], 'manual',pad);
+        end
+        
         if opts.use_gpu
             opts.layer{opts.current_layer}.conv1d_nntb = setupForGPUPrediction(opts.layer{opts.current_layer}.conv1d_nntb);
         else
@@ -49,13 +57,20 @@ if isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1 %
     else 
         I=permute(I,[1,4,2,3]);
         dzdy=permute(dzdy,[1,4,2,3]);
-        y = conv1d_nntb.backward( I, [], dzdy, [] );
-        y=permute(y,[1,3,4,2]);
-        if PADDING_MODE==1
-           pad=pad2;
-           y=y(1+pad(1):pad(1)+f,:,:);
+        
+        if opts.nnet_ver<11
+            y = conv1d_nntb.backward( I, [], dzdy, [] );
+            gradients = conv1d_nntb.gradients(I, dzdy);
+            y=permute(y,[1,3,4,2]);
+            if PADDING_MODE==1
+               pad=pad2;
+               y=y(1+pad(1):pad(1)+f,:,:);
+            end
+        else
+            [y,gradients] = conv1d_nntb.backward( I, [], dzdy, [] );
+            y=permute(y,[1,3,4,2]);            
         end
-        gradients = conv1d_nntb.gradients(I, dzdy);
+        
         dzdw=gradients{1}./b;
         dzdw=permute(dzdw,[1,3,4,2]);
         dzdb=reshape(gradients{2}./b,size(bias));
