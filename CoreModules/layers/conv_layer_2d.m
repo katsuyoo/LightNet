@@ -137,7 +137,7 @@ else
     
     td=zeros(i1,i2,out,b,'like',dzdy);
     
-    td(1:stride(1):d1*stride(1),1:stride(2):d2*stride(2),:,:)=dzdy;
+    td(k1:stride(1):k1-1+d1*stride(1),k2:stride(2):k2-1+d2*stride(2),:,:)=dzdy;
     dzdy=td;
     clear td;
     fdzdy=fft2(dzdy);
@@ -153,8 +153,6 @@ else
     end
     y=real(ifft2(y));
     
-    %next line is a 'dirty' circular shift.
-    y=circshift(y,[(k1-1),(k2-1)]); 
                
     if(~isempty(pad))
         y=y(1+pad(1):pad(1)+original_size_r,1+pad(3):pad(3)+original_size_c,:,:);
@@ -164,17 +162,19 @@ else
     %%%dzdw
     dzdw=zeros(k1,k2,in,out,'like',I);
     
+    
     for o=1:out
-        fft_corr=conj(fdzdy(:,:,o,:)).*opts.layer{opts.current_layer}.fI;
+        fft_corr=conj(opts.layer{opts.current_layer}.fI).*fdzdy(:,:,o,:);
         fft_corr=mean(fft_corr,4); %minibatch averaging
         fft_corr=real(ifft2(fft_corr));
-        dzdw(:,:,:,o)= fft_corr(1:k1,1:k2,:,:);% requires thorough understanding of fft, and the shifts 
+        dzdw(:,:,:,o)= fft_corr(1:k1,1:k2,:,:);%
     end    
-    
-    if(~flip_kernel)
+
+    if(flip_kernel)
         dzdw=flip(flip(dzdw,1),2);
     end
-        
+
+    
     if ~isempty(bias)
         dzdb=sum(sum(mean(dzdy,4),1),2);   
         %minibatch averaging + patch summing (note this is how much it changes the final loss)

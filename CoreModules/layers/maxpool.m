@@ -1,6 +1,7 @@
 function [ y,from,opts ] = maxpool( I, K, S,pad,dzdy,from,opts )
 
-if opts.use_nntoolbox==1
+
+if isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1 %
     if isempty(pad),pad=[0,0,0,0];end
     
     PADDING_MODE=0;

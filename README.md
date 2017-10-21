@@ -32,7 +32,7 @@ Check it out in \SGD2.
 
 ![Init](Init.png)
 
-20170924: A simple example of training a Quasi-RNN model is added to LightNet. Quasi-RNNs are much easier to parallelize compared to RNNs. 
+20170924: A simple example of training a Quasi-RNN is added to LightNet. Quasi-RNNs are much easier to parallelize compared to RNNs. 
 
 
 ## Major functions in LightNet

@@ -139,16 +139,14 @@ else
     %%back prop: load the precomputed ffts and proceed with the
     %%computation.
    
-    %%calculate the 'valid' correlation+flipping    
  
     [d,out,b]=size(dzdy);    
     td=zeros(f,out,b,'like',dzdy);
-    td(1:stride(1):d*stride(1),:,:)=dzdy;
+    td(k:stride(1):k-1+d1*stride(1),:,:)=dzdy;
+    
     dzdy=td;
     clear td;
     fdzdy=fft(dzdy);
-    
-    
     
     %%calculate the 'full' correlation   
     y=zeros(f,in,b,'like',dzdy);%y=dzdx
@@ -167,20 +165,21 @@ else
         y=y(1+pad(1):pad(1)+original_size,:,:);
     end
     
-    
-    
+   
     dzdw=zeros(k,in,out,'like',I);
    
+    
     for o=1:out
-        fft_corr=opts.layer{opts.current_layer}.fI.*conj(fdzdy(:,o,:));
+        fft_corr=conj(opts.layer{opts.current_layer}.fI).*fdzdy(:,o,:);
         fft_corr=mean(fft_corr,3); %minibatch averaging
         fft_corr=real(ifft(fft_corr));
-        dzdw(:,:,o)= fft_corr(1:k,:,:);% requires thorough understanding of fft, and the shifts 
+        dzdw(:,:,o)= fft_corr(1:k,:,:);%
     end    
-    
-    if(~flip_kernel)
+
+    if(flip_kernel)
         dzdw=flip(dzdw,1);
     end
+    
         
     if ~isempty(bias)
         dzdb=sum(mean(dzdy,3),1);   

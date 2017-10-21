@@ -2,7 +2,7 @@ function [ y,opts] = lrn( x,N,kappa,alpha,beta,dzdy,opts)
 %LRN Summary of this function goes here
 %   Detailed explanation goes here
 
-    if opts.use_nntoolbox==1
+    if isfield(opts,'use_nntoolbox')&&opts.use_nntoolbox==1 %
         if ~isfield(opts,'layer')||length(opts.layer)<opts.current_layer||~isfield(opts.layer{opts.current_layer},'lrn_nntb')
             opts.layer{opts.current_layer}.lrn_nntb = nnet.internal.cnn.layer.LocalMapNorm2D( 'lrn_nntb', N,alpha,beta,kappa);
             if opts.use_gpu

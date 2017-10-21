@@ -21,5 +21,4 @@ ssgd_search_freq=10;
 learning_method=@sgd;%training method: @sgd,@adagrad,@rmsprop,@adam,@sgd2
 
 sgd_lr=1e-3;
-
 Main_Template(); %call training template
