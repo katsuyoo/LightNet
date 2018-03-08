@@ -1,29 +1,24 @@
 function Y = softmaxlogloss(X,c,dzdy)
 
-if(length(size(X))>2)
-    sz = size(X);
-    %if(sz(1)>1||sz(2)>1) error('Size error in softmax log loss.'); end
-    dim_out=3;
-end
+if(length(size(X))>2),idx_c=3;end %cnn
+if(length(size(X))<=2),idx_c=1;end%mlp
 
-if(length(size(X))<=2)
-    dim_out=1;
-end
-n_class=size(X,dim_out);
+n_class=size(X,idx_c);
 
-Xmax = max(X,[],dim_out) ;
-ex = exp(bsxfun(@minus, X, Xmax)) ;
-
-idx=c(:)'+n_class*[0:size(X,dim_out+1)-1];   
+Xmax = max(X,[],idx_c) ;
+E = exp(X- Xmax) ;
+S=sum(E,idx_c);
+GT_idx=c(:)'+n_class*[0:size(X,idx_c+1)-1];%ground truth idx   
 if ~exist('dzdy','var')||isempty(dzdy)
     %forward
-    Y = log(sum(ex,dim_out)) +Xmax -reshape(X(idx),size(Xmax));%-log(p) --- the log loss
-    %Y = sum(Y,dim_out+1);% sum of batch loss
+    logS=log(S) +Xmax;
+    Y = logS -reshape(X(GT_idx),size(Xmax));%-log(p) --- the log loss
+    %Y = sum(Y,idx_c+1);% sum of batch loss
 else
     %bp
-    Y = bsxfun(@rdivide, ex, sum(ex,dim_out)) ;
-    Y(idx)=Y(idx)-1;
-    Y = bsxfun(@times, Y, dzdy) ;
+    Y = E./S ;
+    Y(GT_idx)=Y(GT_idx)-1;
+    if dzdy~=1.0, Y = Y.* dzdy;end
 end
 
 

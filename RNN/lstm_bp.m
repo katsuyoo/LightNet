@@ -1,9 +1,9 @@
 function [ net,res,opts ] = lstm_bp( net,res,opts )
-%SLTM_BP Summary of this function goes here
+%LSTM_BP Summary of this function goes here
 %   Detailed explanation goes here
 
     n_frames=opts.parameters.n_frames;    
-    n_cell_nodes=opts.parameters.n_cell_nodes;
+    n_cell_nodes=opts.parameters.n_hidden_nodes;
     
     %1: calculate the gradients of the data fitting transform
     

@@ -52,9 +52,8 @@ if ~isfield(opts,'datatype')
 end
 
 if ~isfield(opts,'LoadNet')
-    %
+    opts.LoadNet=0;
 end
-opts.LoadNet=0;
 
 opts.dataDir=['./',opts.dataset_name,'/'];
 opts=PrepareDataFunc(opts);
@@ -80,8 +79,8 @@ if opts.parameters.selective_sgd==1
     opts.parameters.ssgd_search_freq=ssgd_search_freq;%%search every n epoch
     if ~isfield(opts.parameters,'lrs')
         
-        opts.parameters.lrs =[1,0.5];%initialize selection range
-        if ~strcmp(func2str(opts.parameters.learning_method),'sgd')
+        opts.parameters.lrs =[1,.5];%initialize selection range
+        if ~strcmp(func2str(opts.parameters.learning_method),'sgd')&&~strcmp(func2str(opts.parameters.learning_method),'sgd2')
             opts.parameters.lrs =opts.parameters.lrs.*1e-1;
         end
         opts.parameters.lrs=[opts.parameters.lrs,opts.parameters.lrs*1e-1,opts.parameters.lrs*1e-2,opts.parameters.lrs*1e-3];%initialize selection range

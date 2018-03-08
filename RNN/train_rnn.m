@@ -35,11 +35,17 @@ function [net,opts]=train_rnn(net,opts)
         if strcmp(opts.network_name,'rnn')
             [ net,res,opts ] = rnn_ff( net,opts );
         end
-        
+        if strcmp(opts.network_name,'qrnn')
+            [ net,res,opts ] = qrnn_ff( net,opts );
+        end
         
         %%The following lines are to facilitate using customized loss functions
-        for t=1:opts.parameters.n_frames   
-            res.Fit{t}(numel(net{end}.layers)+1).dzdx=1.0;
+        if ~strcmp(opts.network_name,'qrnn')
+            for t=1:opts.parameters.n_frames   
+                res.Fit{t}(numel(net{end}.layers)+1).dzdx=1.0;
+            end
+        else
+            res.Fit(numel(net{end}.layers)+1).dzdx=1.0;
         end
         %%%%%%%%%%%%%%%%%%%%%%%%
         
@@ -52,8 +58,12 @@ function [net,opts]=train_rnn(net,opts)
             [ net,res,opts ] = gru_bp( net,res,opts );
         end
         
-         if strcmp(opts.network_name,'rnn')
+        if strcmp(opts.network_name,'rnn')
             [ net,res,opts ] = rnn_bp( net,res,opts );
+        end
+        
+        if strcmp(opts.network_name,'qrnn')
+            [ net,res,opts ] = qrnn_bp( net,res,opts );
         end
         %%summarize
         if opts.display_msg==1 && isfield(opts,'input_labels')
@@ -100,6 +110,11 @@ function [net,opts]=train_rnn(net,opts)
         if strcmp(opts.network_name,'rnn')
             [  net{1},res.Input,opts ] = feval( opts.parameters.learning_method, net{1},res.Input,opts );
             [  net{2},res.Fit,opts ] = feval( opts.parameters.learning_method, net{2},res.Fit,opts );
+        end
+        if strcmp(opts.network_name,'qrnn')
+            [  net{1},res.Gates,opts ] = feval( opts.parameters.learning_method, net{1},res.Gates,opts );
+            [  net{2},res.Input,opts ] = feval( opts.parameters.learning_method, net{2},res.Input,opts );
+            [  net{3},res.Fit,opts ] = feval( opts.parameters.learning_method, net{3},res.Fit,opts );
         end
     end
     

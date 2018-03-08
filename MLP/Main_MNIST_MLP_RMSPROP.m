@@ -3,8 +3,11 @@ addpath(genpath('../CoreModules'));
 n_epoch=20; %training epochs
 dataset_name='mnist'; %dataset name
 network_name='mlp'; %network name
-use_gpu=0 %use gpu or not 
-opts.use_nntoolbox=0
+use_gpu=(gpuDeviceCount>0) %use gpu or not 
+if use_gpu
+    %Requires Neural Network Toolbox to use it.
+    opts.use_nntoolbox=license('test','neural_network_toolbox')
+end
 %function handle to prepare your data
 PrepareDataFunc=@PrepareData_MNIST_MLP;
 %function handle to initialize the network

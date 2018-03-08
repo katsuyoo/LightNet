@@ -15,7 +15,7 @@ addpath('./lm_data');
 
 n_epoch=20;%20 %%training epochs
 dataset_name='char'; % dataset name
-network_name='lstm';%'gru';'rnn','lstm'
+network_name='qrnn';%'gru';'rnn','lstm'
 use_gpu=0; %%use gpu or not 
 opts.use_nntoolbox=0;
 
@@ -34,13 +34,16 @@ if strcmp(network_name,'rnn')
     opts.parameters.Id_w=1;%vanilla rnn:0, rnn with skip links: 1
 end
 
+if strcmp(network_name,'qrnn')
+    NetInit=@net_init_char_qrnn;  %% function to initialize the network
+end
 
 use_selective_sgd=0; %automatically select learning rates
 %%selective-sgd parameters
 %ssgd_search_freq=10; %select new coarse-scale learning rates every n epochs
 
 
-learning_method=@rmsprop; %training method: @rmsprop;
+learning_method=@adam; %training method: @rmsprop;
 
 %sgd parameter (unnecessary if selective-sgd is used)
 sgd_lr=1e-2;
@@ -60,6 +63,11 @@ if strcmp(network_name,'gru')
     opts.parameters.n_gates=2;
 end
 
+if strcmp(network_name,'qrnn')
+    opts.parameters.n_gates=1;
+    use_gpu=(gpuDeviceCount>0);  
+    opts.use_nntoolbox=license('test','neural_network_toolbox');
+end
 
 opts.parameters.n_frames=64;%%%%max sentence length
 
@@ -157,10 +165,8 @@ for ep=start_ep:opts.n_epoch
     %}
     parameters=opts.parameters;    
     results=opts.results;
-    save([fullfile(opts.output_dir2,[opts.output_name2,num2str(ep),'.mat'])],'net','parameters','results');     
+    save([fullfile(opts.output_dir,[opts.output_name,num2str(ep),'.mat'])],'net','parameters','results');     
 end
-
-copyfile(fullfile(opts.output_dir2,[opts.output_name2,num2str(ep),'.mat']),fullfile(opts.output_dir,opts.output_name));
 
 
 

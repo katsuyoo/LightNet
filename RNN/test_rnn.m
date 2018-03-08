@@ -23,6 +23,9 @@ function [opts]=test_rnn(net,opts)
         if strcmp(opts.network_name,'rnn')
             [ net,res,opts ] = rnn_ff( net,opts );
         end
+        if strcmp(opts.network_name,'qrnn')
+            [ net,res,opts ] = qrnn_ff( net,opts );
+        end
        
         if isfield(opts,'err')
             opts.MiniBatchError=[opts.MiniBatchError;gather( opts.err(1))];

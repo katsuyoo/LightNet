@@ -4,12 +4,12 @@ function [y,mask] = dropout(x,dzdy,opts)
 mask = opts.mask ;
 
 if isempty(dzdy)
-    scale = cast(1 / (1 - opts.rate), 'like', x) ;
-    mask = scale * (rand(size(x), 'like', x) >= opts.rate) ;         
+    scale = 1 / (1 - opts.rate);
+    mask =  (rand(size(x), 'like', x) >= opts.rate) .* scale;         
 end
 
 if isempty(dzdy)
-    y = mask .* x ;   
+    y = x.*mask  ;   
 else
-    y = mask .* dzdy ;   
+    y = dzdy.*mask ;   
 end

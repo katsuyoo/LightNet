@@ -4,6 +4,7 @@ switch hardware
   case 'cpu', moveop = @(x) gather(x) ;
   otherwise, error('Unknown destination ''%s''.', destination) ;
 end
+
 for l=1:numel(net.layers)
   switch net.layers{l}.type
     case {'conv','mlp'}
@@ -15,7 +16,6 @@ for l=1:numel(net.layers)
           end
         end
       end
-    otherwise
-        
+      otherwise
   end
 end

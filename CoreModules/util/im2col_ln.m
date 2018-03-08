@@ -35,7 +35,7 @@ function [ slices,idx0 ] = im2col_ln( I, K, S )
     
     %%%%this will give us the index of all the sliding window elements in
     %%%%an image.
-    idx0=bsxfun(@plus,idx1,idx3);
+    idx0=(idx1+idx3);
     
     %%%index the batches and channels.
     idx5=[0:N-1]'*Hin*Win;
@@ -44,7 +44,7 @@ function [ slices,idx0 ] = im2col_ln( I, K, S )
     idx6=[0:B-1]*Hin*Win*N;
     idx6=idx6(ones(N,1),:);
     
-    idx5=idx5+idx6;
+    idx5=(idx5+idx6);
     
     %%%indexes of all elements
     idx5=permute(idx5,[3,4,1,2]);
@@ -52,7 +52,7 @@ function [ slices,idx0 ] = im2col_ln( I, K, S )
         idx0=gpuArray(idx0);
         idx5=gpuArray(idx5);
     end
-    idx0=bsxfun(@plus,idx0,idx5); %better calculated on gpu
+    idx0=(idx0+idx5); %better calculated on gpu
     
     
     %%%pooling computations
